@@ -1,0 +1,53 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/tools/index",
+    "pages/learn/index",
+    "pages/AICircle/index",
+    "pages/user/index"
+  ],
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#007AFF",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/table/index/index",
+        "text": "首页",
+        "iconPath": "static/tabbar/home.png",
+        "selectedIconPath": "static/tabbar/home-active.png"
+      },
+      {
+        "pagePath": "pages/table/tools/index",
+        "text": "AI agent",
+        "iconPath": "static/tabbar/tools.png",
+        "selectedIconPath": "static/tabbar/tools-active.png"
+      },
+      {
+        "pagePath": "pages/table/learn/index",
+        "text": "课程星球",
+        "iconPath": "static/tabbar/learn.png",
+        "selectedIconPath": "static/tabbar/learn-active.png"
+      },
+      {
+        "pagePath": "pages/table/AICircle/index",
+        "text": "知识星球",
+        "iconPath": "static/tabbar/circle.png",
+        "selectedIconPath": "static/tabbar/circle-active.png"
+      },
+      {
+        "pagePath": "pages/table/user/index",
+        "text": "我的",
+        "iconPath": "static/tabbar/user.png",
+        "selectedIconPath": "static/tabbar/user-active.png"
+      },
+      {
+        "pagePath": "pages/table/share/index",
+        "text": "知识星球",
+        "iconPath": "static/tabbar//user.png",
+        "selectedIconPath": "static/tabbar/user-active.png"
+      }
+    ]
+  },
+  "cloud": true
+}

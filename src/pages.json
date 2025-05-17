@@ -1,0 +1,493 @@
+{
+  "pages": [
+    {
+      "path": "pages/table/index/index",
+      "style": {
+        "navigationBarTitleText": "AI智汇社",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTextStyle": "black",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/table/tools/index",
+      "style": {
+        "navigationBarTitleText": "AI agent",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/table/share/index",
+      "style": {
+        "navigationBarTitleText": "分享星球",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/login/index",
+      "style": {
+        "navigationBarTitleText": "登录",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTextStyle": "black",
+        "navigationStyle": "custom"
+      }
+    },
+
+    {
+      "path": "pages/tools/gushihua",
+      "style": {
+        "navigationBarTitleText": "古诗话",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTextStyle": "black",
+        "navigationStyle": "custom"
+      }
+    },
+
+    {
+      "path": "pages/tools/yangsheng",
+      "style": {
+        "navigationBarTitleText": "养生",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTextStyle": "black",
+        "navigationStyle": "custom"
+      }
+    },
+
+    {
+      "path": "pages/tools/sptq",
+      "style": {
+        "navigationBarTitleText": "视频提取",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTextStyle": "black",
+        "navigationStyle": "custom"
+      }
+    },
+
+    {
+      "path": "pages/tools/douyinbaokuanwenan",
+      "style": {
+        "navigationBarTitleText": "抖音爆款文案",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTextStyle": "black",
+        "navigationStyle": "custom"
+      }
+    },
+
+    {
+      "path": "pages/tools/ai_wenan",
+      "style": {
+        "navigationBarTitleText": "文案创作",
+        "navigationStyle": "custom"
+      }
+    },
+
+    {
+      "path": "pages/coursePlanet/index",
+      "style": {
+        "navigationBarTitleText": "课程星球",
+        "navigationBarBackgroundColor": "#93D2F3",
+        "navigationBarTextStyle": "black"
+      }
+    },
+
+    {
+      "path": "pages/earn_commission/index",
+      "style": {
+        "navigationBarTitleText": "分佣计划",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+
+    {
+      "path": "pages/table/learn/index",
+      "style": {
+        "navigationBarTitleText": "课程星球",
+         "navigationBarBackgroundColor": "#93D2F3",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/table/user/index",
+      "style": {
+        "navigationBarTitleText": "我的",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/assistant/index",
+      "style": {
+        "navigationBarTitleText": "创意助手",
+        "backgroundColor": "#121318"
+      }
+    },
+    {
+      "path": "pages/analytics/index",
+      "style": {
+        "navigationBarTitleText": "数据分析",
+        "backgroundColor": "#121318"
+      }
+    },
+    {
+      "path": "pages/course/detail",
+      "style": {
+        "navigationBarTitleText": "课程详情",
+        "backgroundColor": "#121318"
+      }
+    },
+    {
+      "path": "pages/course/MoreCourse",
+      "style": {
+        "navigationBarTitleText": "课程星球",
+        "backgroundColor": "#121318"
+      }
+    },
+    {
+      "path": "pages/coursePlanet/Official-information/index",
+      "style": {
+        "navigationBarTitleText": "官方资讯",
+        "backgroundColor": "#121318",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/news/detail",
+      "style": {
+        "navigationBarTitleText": "资讯详情",
+        "backgroundColor": "#121318"
+      }
+    },
+    {
+      "path": "pages/income/index",
+      "style": {
+        "navigationBarTitleText": "我的佣金",
+        "backgroundColor": "#121318",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/income/withdraw/index",
+      "style": {
+        "navigationBarTitleText": "提现明细",
+        "backgroundColor": "#121318",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/vip/details",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "会员详情"
+      }
+    },
+    {
+      "path": "pages/vip/index",
+      "style": {
+        "navigationBarTitleText": "VIP会员",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/live-streaming/index",
+      "style": {
+        "navigationBarTitleText": "传说",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/test/cloud",
+      "style": {
+        "navigationBarTitleText": "云服务测试",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/tools/ai_photo",
+      "style": {
+        "navigationBarTitleText": "AI图片创作",
+        "navigationStyle": "custom"
+      }
+    },
+
+    {
+      "path": "pages/tools/ai_video",
+      "style": {
+        "navigationBarTitleText": "AI视频创作",
+        "navigationStyle": "custom"
+      }
+    },
+
+    {
+      "path": "pages/tools/ai-marketing",
+      "style": {
+        "navigationBarTitleText": "AI智能营销",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/distribution/index",
+      "style": {
+        "navigationBarTitleText": "操盘手中心",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/distribution_personnel_list/index",
+      "style": {
+        "navigationBarTitleText": "操盘手团队列表",
+        "navigationBarBackgroundColor": "#93D2F3",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/distribution_order_list/index",
+      "style": {
+        "navigationBarTitleText": "操盘手订单列表",
+        "navigationBarBackgroundColor": "#93D2F3",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/withdrawal/index",
+      "style": {
+        "navigationBarTitleText": "提现",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTextStyle": "black",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/pay/index",
+      "style": {
+        "navigationBarTitleText": "支付测试"
+      }
+    },
+    {
+      "path": "pages/business-card/index",
+      "style": {
+        "navigationBarTitleText": "个人名片",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/recruitment/index",
+      "style": {
+        "navigationBarTitleText": "操盘手计划"
+      }
+    },
+    {
+      "path": "pages/top-up/index",
+      "style": {
+        "navigationBarTitleText": "充值",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTextStyle": "black",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/tools/1",
+      "style": {
+        "navigationBarTitleText": "工具1",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/tools/2",
+      "style": {
+        "navigationBarTitleText": "工具2",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/tools/clzs",
+      "style": {
+        "navigationBarTitleText": "材料助手",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/tools/cwsq",
+      "style": {
+        "navigationBarTitleText": "宠物社区",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/tools/douyin_zhuanwenzi",
+      "style": {
+        "navigationBarTitleText": "抖音转文字",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/tools/gzh_sxcg",
+      "style": {
+        "navigationBarTitleText": "公众号素材创作",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/tools/haibao",
+      "style": {
+        "navigationBarTitleText": "海报制作",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/tools/redbook_chaijie",
+      "style": {
+        "navigationBarTitleText": "小红书拆解",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/tools/redbook_fengmian",
+      "style": {
+        "navigationBarTitleText": "小红书封面",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/tools/rjqx",
+      "style": {
+        "navigationBarTitleText": "日记情绪",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/tools/scdy",
+      "style": {
+        "navigationBarTitleText": "素材抖音",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/tools/shiyanbaogao",
+      "style": {
+        "navigationBarTitleText": "实验报告",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/tools/shuziren",
+      "style": {
+        "navigationBarTitleText": "数字人",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/tools/xiaohongshu_wenan",
+      "style": {
+        "navigationBarTitleText": "小红书文案",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/tools/yuer_station",
+      "style": {
+        "navigationBarTitleText": "育儿站",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/tools/zhiyuxichahua",
+      "style": {
+        "navigationBarTitleText": "治愈系插画话",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/tools/Markdown",
+      "style": {
+        "navigationBarTitleText": "Markdown编辑器",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/tools/tools",
+      "style": {
+        "navigationBarTitleText": "工具中心",
+        "navigationStyle": "custom"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "AI智汇社",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#666666",
+    "selectedColor": "#00F2FF",
+    "backgroundColor": "#fff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/table/tools/index",
+        "text": "AI agent",
+        "iconPath": "static/tabbar/home.png",
+        "selectedIconPath": "static/tabbar/home-active.png"
+      },
+      {
+        "pagePath": "pages/table/learn/index",
+        "text": "课程星球",
+        "iconPath": "static/tabbar/learn.png",
+        "selectedIconPath": "static/tabbar/learn-active.png"
+      },
+      {
+        "pagePath": "pages/table/index/index",
+        "text": "首页",
+        "iconPath": "static/tabbar/home.png",
+        "selectedIconPath": "static/tabbar/home-active.png"
+      },
+      {
+        "pagePath": "pages/table/share/index",
+        "text": "知识星球",
+        "iconPath": "static/tabbar/user.png",
+        "selectedIconPath": "static/tabbar/user-active.png" 
+      },
+      {
+        "pagePath": "pages/table/user/index",
+        "text": "我的",
+        "iconPath": "static/tabbar/user.png",
+        "selectedIconPath": "static/tabbar/user-active.png"
+      }
+    ]
+  },
+  "condition": {
+    "current": 0,
+    "list": [
+      {
+        "name": "首页",
+        "path": "pages/index/index"
+      },
+      {
+        "name": "创意助手",
+        "path": "pages/assistant/index"
+      },
+      {
+        "name": "课程详情",
+        "path": "pages/course/detail"
+      },
+      {
+        "name": "云服务测试",
+        "path": "pages/test/cloud"
+      },
+      {
+        "name": "VIP会员",
+        "path": "pages/vip/index"
+      },
+      {
+        "name": "AI文案助手",
+        "path": "pages/ai/chat"
+      },
+      {
+        "name": "AI图片创作",
+        "path": "pages/tools/marketing-assistant"
+      }
+    ]
+  }
+}
