@@ -16,9 +16,10 @@
         alt="aspectFill"
         style="width: 40rpx; height: 40rpx; margin-left: 20rpx"
       />
-      <input
+      <SearchBox
         style="height: 100%; width: 100%; color: black"
         placeholder="请输入你需要输入的课程内容"
+        @input="onInput" @search="onSearch"
       />
     </view>
     <CourseCarousel @item-click="onCarouselItemClick" />
@@ -33,12 +34,16 @@
       :CourseList1="CourseList1"
       :CourseList2="CourseList2"
       @oncourses="oncourseClick"
+      :search-keyword="searchKeyword"
     />
     <MoreTitles
       images="https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/coursePlanet/9.png"
       title="最新课程"
     />
-    <UpToDate :list="list" @upToDate="upToDateClick" />
+    <UpToDate 
+    :list="list" 
+    @upToDate="upToDateClick"
+     />
   </view>
 </template>
 
@@ -52,6 +57,7 @@ import UpToDate from "@/components/CourseCarousel/UpToDate.vue";
 import { postPopularCourses } from "@/service/index.js";
 import { getCoursePlanet } from "@/service/coursePlanet.js";
 import { pay } from "@/utils/pay/index.js";
+import SearchBox from "../tools/components/Search-box.vue";
 
 export default {
   components: {
@@ -68,6 +74,7 @@ export default {
       CourseList1: [],
       CourseList2: [],
       list: [],
+      searchKeyword:"",
       images:
         "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/coursePlanet/1.png",
       showModal: false,
@@ -78,25 +85,15 @@ export default {
     // this.popularCourses();
   },
   methods: {
-    //数据获取方法
-    // popularCourses() {
-    //   postPopularCourses()
-    //     .then((res) => {
-    //       if (res.data) {
-    //         console.log("首页课程", res.data);
-    //         this.list = res.data;
-    //         this.CourseList1 = res.data
-    //           .filter((item) => item.type === 1)
-    //           .slice(0, 3);
-    //         this.CourseList2 = res.data
-    //           .filter((item) => item.type === 2)
-    //           .slice(0, 3);
-    //       }
-    //     })
-    //     .catch((err) => {
-    //       console.error("首页课程", err);
-    //     });
-    // },
+    // 课程搜索框 处理输入、搜索、跳转逻辑
+    onInput(value) {
+      console.log("Input value:", value);
+      this.searchKeyword=value;
+    },
+    onSearch(value) {
+      console.log("Search value:", value);
+      this.searchKeyword=value;
+    },
 
     onCarouselItemClick(item) {
       // 处理轮播图点击事件

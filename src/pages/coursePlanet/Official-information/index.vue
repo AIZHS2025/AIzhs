@@ -1,12 +1,14 @@
 /* 官方资讯
 */
 <template>
-    <view class="container" style="padding: 0 20rpx">
+    <view class="main-container" style="color: white">
     <!-- 引入 顶部导航栏 -->
     <navigation-bars
         color="black"
         title="官方资讯"
+        viscosity="true"
         @pack="packClick"
+        :backgroundColor="color"
         :image="image"  />
 
     <!-- 以下为内容 -->
@@ -30,6 +32,7 @@ export default {
             parentId: '',  //首页知识星球列表 父级id
             id: '',  //资讯id
             type: '',
+            color:'',
             image:'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/返回.png',
             plantInformation:{
                 title: '',
@@ -42,6 +45,10 @@ export default {
             detail:{}
         }
     },
+    onPageScroll(e) {
+    this.scrollTop = e.scrollTop;
+    this.color = e.scrollTop > 20 ? "white" : "transparent";
+  },
     onLoad(options) {
 
         // this.parentId = options.parentId;
@@ -66,17 +73,6 @@ export default {
                 if(res.data){
                     this.detail=res.data[0]
                 }
-                // this.plantInformation = res.data;
-                // // 如果res.data.children存在，则将id为this.id的资讯详情赋值给this.plantInformation
-                // if (Array.isArray(res.data.children)) {
-                //         const childInfo = res.data.children.find(child => child.id === this.id);
-                //         if (childInfo) {
-                //             this.plantInformation = {
-                //                 ...this.plantInformation,
-                //                 ...childInfo
-                //             };
-                //         }
-                //     }
             }
 
         })
@@ -91,7 +87,7 @@ export default {
 </script>
 
 <style scoped>
-.container {
+.main-container {
     min-height: 100vh;
     padding-bottom: 40rpx;
     background-image: url("https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/12071746256773_.pic.jpg");
@@ -100,7 +96,4 @@ export default {
     position: relative;
 
 }
-
-
-
 </style>

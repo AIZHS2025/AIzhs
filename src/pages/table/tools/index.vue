@@ -23,7 +23,7 @@
     <intelligent-assistant></intelligent-assistant>
 
     <!-- 引入 搜索框组件 -->
-    <search-box></search-box>
+    <search-box @input="onInput" @search="onSearch"></search-box>
 
     <!-- 引入 滑动卡片组件 -->
     <!-- <slide-card @change="onTagChange"></slide-card> -->
@@ -34,7 +34,7 @@
         <view class="item large-item" @click="navigateTo('/pages/tools/')">
           <view class="item-image-container">
             <image
-              src="https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/new_yijian.png"
+              src="cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/14.png"
               mode="aspectFill"
               style="width: 100%; height: 100%"
             ></image>
@@ -52,7 +52,7 @@
 
     <!-- 引入 卡片下智能体类别组件 -->
     <view style="padding: 0rpx 20rpx 30rpx 20rpx">
-      <ai-list></ai-list>
+      <ai-list :search-keyword="searchKeyword"></ai-list>
     </view>
   </view>
 </template>
@@ -68,7 +68,7 @@ import AiList from "./components/Ai-list.vue";
 
 export default {
   components: {
-    InterestTrackModal,
+    // InterestTrackModal,
     IntelligentAssistant,
     NavigationBars,
     SlideCard,
@@ -82,6 +82,7 @@ export default {
       color: "",
       showModal: true,
       currentBanner: 0,
+      searchKeyword:"",
       // 兴趣赛道对应的页面路径
       interestPagePath: "/pages/table/index/interest",
 
@@ -104,9 +105,11 @@ export default {
     // AI搜索框 处理输入、搜索、跳转逻辑
     onInput(value) {
       console.log("Input value:", value);
+      this.searchKeyword=value;
     },
     onSearch(value) {
       console.log("Search value:", value);
+      this.searchKeyword=value;
     },
     onNavigate(value) {
       console.log("Navigate value:", value);

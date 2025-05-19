@@ -12,7 +12,7 @@
         @click="navigateTo(item.path)"
       >
         <view class="ai-card-content">
-          <view>
+          <view class="ai-card-text">
             <text class="ai-card-title">{{ item.title }}</text>
             <text class="ai-card-desc">{{ item.desc }}</text>
             <view class="ai-card-author">{{ item.author }}</view>
@@ -58,141 +58,213 @@ export default {
     return {
       expanded: false,
       aiList: [
-        {
-          title: "AI文案创作",
-          desc: "为您轻松生成文案帮你降本增效",
-          author: "@作者名称",
-          img: "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/r1.png",
-          bg: "linear-gradient(0deg,rgba(250, 250, 250, 1) 8%, rgba(122, 187, 240, 1) 51%, rgba(250, 248, 245, 1) 96%);",
-          path: "/pages/tools/ai_wenan",
-        },
-        {
-          title: "AI图片创作",
-          desc: "为您轻松制作图片帮你生成智能图片",
-          author: "@作者名称",
-          img: "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/r2.png",
-          bg: "linear-gradient(0deg,rgba(250, 250, 250, 1) 8%, rgba(122, 146, 240, 1) 51%, rgba(250, 248, 245, 1) 96%);",
-          path: "/pages/tools/ai_photo",
-        },
-        {
-          title: "AI视频创作",
-          desc: "为您轻松生成文案帮你降本增效",
-          author: "@作者名称",
-          img: "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/r3.png",
-          bg: "linear-gradient(0deg,rgba(250, 250, 250, 1) 9%, rgba(242, 194, 223, 1) 45%, rgba(250, 248, 245, 1) 93%);",
-          path: "/pages/tools/ai_video",
-        },
-        {
-          title: "AI自动剪辑",
-          desc: "为您轻松生成文案帮你降本增效",
-          author: "@作者名称",
-          img: "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/r4.png",
-          bg: " linear-gradient(0deg,rgba(255, 255, 255, 1) 4%, rgba(175, 237, 202, 1) 29%, rgba(199, 215, 235, 1) 66%, rgba(242, 242, 237, 1) 96%);",
-          path: "/pages/tools/sptq",
-        },
-        {
-          title: "抖音爆款文案",
-          desc: "为您轻松生成文案帮你降本增效",
-          author: "@作者名称",
-          img: "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/r1.png",
-          bg: "linear-gradient(0deg,rgba(240, 240, 240, 1) 5%, rgba(242, 242, 203, 1) 56%, rgba(240, 242, 201, 1) 48%, rgba(250, 254, 255, 1) 93%);",
-          path: "/pages/tools/douyinbaokuanwenan",
-        },
-        {
-          title: "小红书文案",
-          desc: "为您轻松制作图片帮你生成智能图片",
-          author: "@作者名称",
-          img: "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/r2.png",
-          bg: "linear-gradient(0deg,rgba(245, 245, 242, 1) 3%, rgba(237, 209, 227, 1) 30%, rgba(255, 207, 232, 1) 74%, rgba(244, 237, 241, 1) 94%);",
-          path: "/pages/tools/xiaohongshu_wenan",
-        },
-        {
-          title: "AI数字人",
-          desc: "为您轻松生成文案帮你降本增效",
-          author: "@作者名称",
-          img: "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/r3.png",
-          bg: "linear-gradient(0deg,rgba(240, 240, 240, 1) 5%, rgba(191, 245, 237, 1) 51%, rgba(199, 242, 234, 1) 48%, rgba(250, 254, 255, 1) 93%);",
-          path: "/pages/tools/shuziren",
-        },
-        {
-          title: "海报制作",
-          desc: "为您轻松制作高质量海报",
-          author: "@作者名称",
-          img: "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/r4.png",
-          bg: "linear-gradient(0deg,rgba(240, 237, 237, 1) 4%, rgba(242, 213, 150, 1) 23%, rgba(252, 229, 207, 1) 81%, rgba(242, 235, 235, 1) 89%);",
-          path: "/pages/tools/haibao",
-        },
-        // 所有其他的智能体类别按钮
-        {
-          title: "视频提取",
-          desc: "轻松生成专业的实验报告",
-          author: "@作者名称",
-          img: "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/r1.png",
-          bg: "linear-gradient(0deg,rgba(250, 250, 250, 1) 8%, rgba(122, 187, 240, 1) 51%, rgba(250, 248, 245, 1) 96%);",
-          path: "/pages/tools/shiyanbaogao",
-        },
-        {
-          title: "养生指南",
-          desc: "专业的养生知识与建议",
-          author: "@作者名称",
-          img: "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/r2.png",
-          bg: "linear-gradient(0deg,rgba(250, 250, 250, 1) 8%, rgba(122, 146, 240, 1) 51%, rgba(250, 248, 245, 1) 96%);",
-          path: "/pages/tools/yangsheng",
-        },
-        {
-          title: "育儿百科",
-          desc: "专业的育儿知识指导",
-          author: "@作者名称",
-          img: "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/r3.png",
-          bg: "linear-gradient(0deg,rgba(250, 250, 250, 1) 9%, rgba(242, 194, 223, 1) 45%, rgba(250, 248, 245, 1) 93%);",
-          path: "/pages/tools/yuer_station",
-        },
-        {
-          title: "AI营销助手",
-          desc: "智能营销方案生成",
-          author: "@作者名称",
-          img: "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/r4.png",
-          bg: "linear-gradient(0deg,rgba(255, 255, 255, 1) 4%, rgba(175, 237, 202, 1) 29%, rgba(199, 215, 235, 1) 66%, rgba(242, 242, 237, 1) 96%);",
-          path: "/pages/tools/ai-marketing",
-        },
-        {
-          title: "古诗创作",
-          desc: "智能生成古诗词作品",
-          author: "@作者名称",
-          img: "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/r1.png",
-          bg: "linear-gradient(0deg,rgba(222, 222, 211, 1) 4%, rgba(248, 250, 225, 1) 30%, rgba(225, 236, 247, 1) 55%, rgba(243, 245, 208, 1) 76%, rgba(245, 244, 242, 1) 97%);",
-          path: "/pages/tools/gushihua",
-        },
-        {
-          title: "Markdown",
-          desc: "专业文档编辑工具",
-          author: "@作者名称",
-          img: "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/r2.png",
-          bg: "linear-gradient(0deg,rgba(245, 245, 242, 1) 3%, rgba(237, 209, 227, 1) 30%, rgba(255, 207, 232, 1) 74%, rgba(244, 237, 241, 1) 94%);",
-          path: "/pages/tools/Markdown",
-        },
-        {
-          title: "AI数字人",
-          desc: "为您轻松生成文案帮你降本增效",
-          author: "@作者名称",
-          img: "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/r3.png",
-          bg: "linear-gradient(0deg,rgba(240, 240, 240, 1) 5%, rgba(191, 245, 237, 1) 51%, rgba(199, 242, 234, 1) 48%, rgba(250, 254, 255, 1) 93%);",
-          path: "/pages/tools/shuziren",
-        },
-        {
-          title: "海报制作",
-          desc: "为您轻松制作高质量海报",
-          author: "@作者名称",
-          img: "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/r4.png",
-          bg: "linear-gradient(0deg,rgba(240, 237, 237, 1) 4%, rgba(242, 213, 150, 1) 23%, rgba(252, 229, 207, 1) 81%, rgba(242, 235, 235, 1) 89%);",
-          path: "/pages/tools/haibao",
-        },
+			{
+				title: "AI文案创作",
+				desc: "为您轻松生成文案帮你降本增效",
+				author: "@作者名称",
+				img: "cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/1.png",
+				bg: "linear-gradient(0deg,rgba(250, 250, 250, 1) 8%, rgba(122, 187, 240, 1) 51%, rgba(250, 248, 245, 1) 96%);",
+				path: "/pages/tools/ai_wenan"
+			},
+			{
+				title: "AI图片创作",
+				desc: "为您轻松制作图片帮你生成智能图片",
+				author: "@作者名称",
+				img: "cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/2.png",
+				bg: "linear-gradient(0deg,rgba(250, 250, 250, 1) 8%, rgba(122, 146, 240, 1) 51%, rgba(250, 248, 245, 1) 96%);",
+				path: "/pages/tools/ai_photo"
+			},
+			{
+				title: "AI视频生成",
+				desc: "根据提供的内容生成视频",
+				author: "@作者名称",
+				img: "cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/3.png",
+				bg:  "linear-gradient(0deg,rgba(250, 250, 250, 1) 9%, rgba(242, 194, 223, 1) 45%, rgba(250, 248, 245, 1) 93%);",
+				path: "/pages/tools/ai_video"
+			},
+			{
+				title: "AI营销内容",
+				desc: "专注于营销领域的内容创作",
+				author: "@作者名称",
+				img: "cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/4.png",
+				bg: " linear-gradient(0deg,rgba(255, 255, 255, 1) 4%, rgba(175, 237, 202, 1) 29%, rgba(199, 215, 235, 1) 66%, rgba(242, 242, 237, 1) 96%);",
+				path: "/pages/tools/ai-marketing"
+			},
+			{
+				title: "抖音转文字",
+				desc: "将抖音视频内容转为文本",
+				author: "@作者名称",
+				img: "cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/5.png",
+				bg:  "linear-gradient(0deg,rgba(240, 240, 240, 1) 5%, rgba(242, 242, 203, 1) 56%, rgba(240, 242, 201, 1) 48%, rgba(250, 254, 255, 1) 93%);",
+				path: "/pages/tools/douyin_zhuanwenzi"
+			},
+			{
+				title: "小红书文案",
+				desc: "为您轻松制作图片帮你生成智能图片",
+				author: "@作者名称",
+				img: "cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/6.png",
+				bg:  "linear-gradient(0deg,rgba(245, 245, 242, 1) 3%, rgba(237, 209, 227, 1) 30%, rgba(255, 207, 232, 1) 74%, rgba(244, 237, 241, 1) 94%);",
+				path: "/pages/tools/xiaohongshu_wenan"
+			},
+			{
+				title: "AI数字人",
+				desc: "为您轻松生成文案帮你降本增效",
+				author: "@作者名称",
+				img: "cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/7.png",
+				bg:  "linear-gradient(0deg,rgba(240, 240, 240, 1) 5%, rgba(191, 245, 237, 1) 51%, rgba(199, 242, 234, 1) 48%, rgba(250, 254, 255, 1) 93%);",
+				path: "/pages/tools/shuziren"
+			},
+			{
+				title: "海报制作",
+				desc: "为您轻松制作高质量海报",
+				author: "@作者名称",
+				img: "cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/8.png",   
+				bg:  "linear-gradient(0deg,rgba(240, 237, 237, 1) 4%, rgba(242, 213, 150, 1) 23%, rgba(252, 229, 207, 1) 81%, rgba(242, 235, 235, 1) 89%);",
+				path: "/pages/tools/haibao"
+			},
+			// 所有其他的智能体类别按钮
+			{
+				title: "实验报告",
+				desc: "轻松生成专业的实验报告",
+				author: "@作者名称",
+				img: "cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/9.png",
+				bg: "linear-gradient(0deg,rgba(250, 250, 250, 1) 8%, rgba(122, 187, 240, 1) 51%, rgba(250, 248, 245, 1) 96%);",
+				path: "/pages/tools/shiyanbaogao"
+			},
+			{
+				title: "养生图文生成",
+				desc: "根据提供的养生内容生成图文音频",
+				author: "@作者名称",
+				img: "cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/10.png",
+				bg: "linear-gradient(0deg,rgba(250, 250, 250, 1) 8%, rgba(122, 146, 240, 1) 51%, rgba(250, 248, 245, 1) 96%);",
+				path: "/pages/tools/yangsheng"
+			},
+			{
+				title: "育儿图文生成",
+				desc: "根据内容生成图文以及音频",
+				author: "@作者名称",
+				img: "cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/11.png",
+				bg: "linear-gradient(0deg,rgba(250, 250, 250, 1) 9%, rgba(242, 194, 223, 1) 45%, rgba(250, 248, 245, 1) 93%);",
+				path: "/pages/tools/yuer_station"
+			},
+			{
+				title: "古诗意境画作",
+				desc: "根据口语描述生成诗词绘制图片",
+				author: "@作者名称",
+				img: "cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/12.png",
+				bg: "linear-gradient(0deg,rgba(255, 255, 255, 1) 4%, rgba(175, 237, 202, 1) 29%, rgba(199, 215, 235, 1) 66%, rgba(242, 242, 237, 1) 96%);",
+				path: "/pages/tools/gushihua"
+			},
+			{
+				title: "抖音爆款文案",
+				desc: "帮助创作抖音平台热门文案",
+				author: "@作者名称",
+				img: "cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/13.png", 
+				bg: "linear-gradient(0deg,rgba(222, 222, 211, 1) 4%, rgba(248, 250, 225, 1) 30%, rgba(225, 236, 247, 1) 55%, rgba(243, 245, 208, 1) 76%, rgba(245, 244, 242, 1) 97%);",
+				path: "/pages/tools/douyinbaokuanwenan"
+			},
+			{
+				title: "小红书拆解",
+				desc: "拆解小红书文本内容",
+				author: "@作者名称",
+				img: "cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/14.png",
+				bg: "linear-gradient(0deg,rgba(245, 245, 242, 1) 3%, rgba(237, 209, 227, 1) 30%, rgba(255, 207, 232, 1) 74%, rgba(244, 237, 241, 1) 94%);",
+				path: "/pages/tools/redbook_chaijie"
+			},
+			{
+				title: "小红书封面制作",
+				desc: "生成小红书类型封面图",
+				author: "@作者名称",
+				img: "cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/15.png",
+				bg:  "linear-gradient(0deg,rgba(240, 240, 240, 1) 5%, rgba(191, 245, 237, 1) 51%, rgba(199, 242, 234, 1) 48%, rgba(250, 254, 255, 1) 93%);",
+				path: "/pages/tools/redbook_fengmian"
+			},
+			{
+				title: "公众号文章缩写重构",
+				desc: "根据文章链接缩写重构公众号文本内容",
+				author: "@作者名称",
+				img: "cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/16.png",
+				bg:  "linear-gradient(0deg,rgba(240, 237, 237, 1) 4%, rgba(242, 213, 150, 1) 23%, rgba(252, 229, 207, 1) 81%, rgba(242, 235, 235, 1) 89%);",
+				path: "/pages/tools/gzh_sxcg"
+			},
+			{
+				title: "Markdown转换工具",
+				desc: "将提供的内容转换为markdown内容",
+				author: "@作者名称",
+				img: "cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/17.png",
+				bg:  "linear-gradient(0deg,rgba(250, 250, 250, 1) 8%, rgba(122, 187, 240, 1) 51%, rgba(250, 248, 245, 1) 96%);",
+				path: "/pages/tools/Markdown"
+			},
+			{
+				title: "宠物社群运营",
+				desc: "生成专注于宠物社群运营内容",
+				author: "@作者名称",
+				img: "cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/18.png",
+				bg:  "linear-gradient(0deg,rgba(250, 250, 250, 1) 8%, rgba(122, 146, 240, 1) 51%, rgba(250, 248, 245, 1) 96%);",
+				path: "/pages/tools/cwsq"
+			},
+			{
+				title: "市场调研",
+				desc: "对提供的内容进行市场调研分析",
+				author: "@作者名称",
+				img: "cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/19.png",
+				bg:  "linear-gradient(0deg,rgba(250, 250, 250, 1) 9%, rgba(242, 194, 223, 1) 45%, rgba(250, 248, 245, 1) 93%);",
+				path: "/pages/tools/scdy"
+			},
+			{
+				title: "视频提取",
+				desc: "提取视频内部文案",
+				author: "@作者名称",
+				img: "cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/3.png",
+				bg:  "linear-gradient(0deg,rgba(255, 255, 255, 1) 4%, rgba(175, 237, 202, 1) 29%, rgba(199, 215, 235, 1) 66%, rgba(242, 242, 237, 1) 96%);",
+				path: "/pages/tools/sptq"
+			},
+			{
+				title: "治愈系插画生成",
+				desc: "根据用户提供的内容生成治愈系插画",
+				author: "@作者名称",
+				img: "cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/4.png",
+				bg:  "linear-gradient(0deg,rgba(240, 240, 240, 1) 5%, rgba(242, 242, 203, 1) 56%, rgba(240, 242, 201, 1) 48%, rgba(250, 254, 255, 1) 93%);",
+				path: "/pages/tools/zhiyuxichahua"
+			},
+			{
+				title: "人间清醒类视频",
+				desc: "根据提供内容生成人间清醒类视频",
+				author: "@作者名称",
+				img: "cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/1.png",
+				bg:  "linear-gradient(0deg,rgba(245, 245, 242, 1) 3%, rgba(237, 209, 227, 1) 30%, rgba(255, 207, 232, 1) 74%, rgba(244, 237, 241, 1) 94%);",
+				path: "/pages/tools/rjqx"
+			},
+			{
+				title: "差旅助手",
+				desc: "根据提供的职位｜生成时间规划",
+				author: "@作者名称",
+				img: "cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/2.png",
+				bg:  "linear-gradient(0deg,rgba(240, 240, 240, 1) 5%, rgba(191, 245, 237, 1) 51%, rgba(199, 242, 234, 1) 48%, rgba(250, 254, 255, 1) 93%);",
+				path: "/pages/tools/clzs"
+			},
+			
       ],
     };
   },
+  props:{
+    searchKeyword:{
+      type:String,
+      default:""
+    }
+  },
   computed: {
+    fliterList(){
+      if(!this.searchKeyword)
+        return this.aiList;
+        const keys=this.searchKeyword.toLowerCase();
+        return this.aiList.filter(item =>
+          item.title.toLowerCase().includes(keys)||item.desc.toLowerCase().includes(keys)
+      );
+    },
     visibleTools() {
-      return this.expanded ? this.aiList : this.aiList.slice(0, 8);
+      const list=this.fliterList;
+      return this.expanded ? list : list.slice(0, 8);
     },
   },
   methods: {
@@ -233,7 +305,6 @@ export default {
   }
   .ai-card {
     width: 48%;
-    // margin-bottom: 32rpx;
     border-radius: 32rpx;
     padding: 19rpx 2rpx 18rpx 30rpx;
     box-sizing: border-box;
@@ -244,39 +315,57 @@ export default {
     box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
   }
   .ai-card-content {
-    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    width: 100%;
+  }
+  .ai-card-text {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .ai-card-title,
+  .ai-card-desc,
+  .ai-card-author {
+    width: auto;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .ai-card-title {
     font-size: 32rpx;
     font-weight: bold;
-    color: #068ce3;
+    color: #6c6c6c;
     margin-bottom: 12rpx;
     display: block;
     text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
   }
   .ai-card-desc {
     font-size: 24rpx;
-    color: #068ce3;
+    color: #6c6c6c;
     margin-bottom: 8rpx;
     display: block;
     opacity: 0.9;
   }
   .ai-card-author {
     font-size: 24rpx;
-    color: #068ce3;
+    color: #6c6c6c;
     opacity: 0.7;
     display: block;
   }
   .ai-card-img {
-    width: 160rpx;
-    height: 100rpx;
+    width: 130rpx;
+    height: 130rpx;
     border-radius: 50%;
     object-fit: cover;
     margin-left: 12rpx;
-    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
   }
 
   /* 展开/收起按钮样式 */
