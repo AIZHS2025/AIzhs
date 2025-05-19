@@ -37,11 +37,11 @@
                 >
               </view>
             </view>
-
-            <text v-if="userInfo.isVip == false" class="user-type"
-              >未开通会员</text
+            <text v-if="userInfo.vipJudgment" class="user-type"
+              >已开通会员</text
             >
-            <text v-else class="user-type">已开通会员</text>
+            <text v-else class="user-type">未开通会员</text>
+
             <text class="user-id">ID:{{ userInfo.id }}</text>
           </view>
         </view>
@@ -51,18 +51,31 @@
         <view>
           <!-- VIP会员中心 -->
           <view class="vip-card">
-            <view class="vip-left">
+            <view
+              class="vip-left"
+              :style="{ width: vipJudgment ? '100%' : '60%' }"
+            >
               <image
                 class="vip-icon"
                 :src="'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/user/vip-icon.png'"
                 mode="aspectFit"
               ></image>
-              <view class="vip-text-box">
+              <view class="vip-text-box" v-if="vipJudgment">
+                <text class="vip-text">VIP会员等级：{{ userInfo.is_VIP }}</text>
+                <text class="vip-text-sub">距离下一个等级差100</text>
+              </view>
+              <view class="vip-text-box" v-else>
                 <text class="vip-text">VIP会员中心</text>
                 <text class="vip-text-sub">开通立享多重特权</text>
               </view>
             </view>
-            <button class="open-vip-btn" @click="paytest">立即开通</button>
+            <button
+              class="open-vip-btn"
+              @click="paytest"
+              v-if="vipJudgment === false"
+            >
+              立即开通
+            </button>
           </view>
         </view>
       </view>
@@ -255,10 +268,10 @@ export default {
       order_type: 1,
       product_id: "",
       vip: [],
+      vipJudgment: false, //是否开通VIP
       userInfo: {
         isLogin: false, //是否登录
         id: "34567", //用户ID
-        isVip: false, //是否开通VIP
         userName: "未登录用户", //用户名
         avatar:
           "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/user/act.png", //头像
@@ -276,11 +289,11 @@ export default {
   },
   mounted() {
     // 会员
-    // 会员
     this.paySelectsGoods("0").then((data) => {
       this.vip = data.find((item) => item.type === 0);
       console.log("this.vip", this.vip);
     });
+    this.vipJudgment = uni.getStorageSync("vip");
     this.stablePay = this.stabilization(
       () => pay(this.product_id, this.order_type),
       500
@@ -355,11 +368,11 @@ export default {
       });
     },
     // 处理开通VIP
-    handleOpenVip() {
-      uni.navigateTo({
-        url: "/pages/vip/index",
-      });
-    },
+    // handleOpenVip() {
+    //   uni.navigateTo({
+    //     url: "/pages/vip/index",
+    //   });
+    // },
     // 处理订单
     handleOrder() {
       alert("点击查看订单");
@@ -386,7 +399,7 @@ export default {
       this.product_id = this.vip.id;
       this.stablePay().then((res) => {
         this.user = uni.getStorageSync("data");
-        this.grade = uni.getStorageSync("vip");
+        this.vipJudgment = uni.getStorageSync("vip");
       });
       // uni.navigateTo({
       //   url: "/pages/pay/index",

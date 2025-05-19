@@ -43,7 +43,7 @@
               </view>
             </view>
             <view style="color: #f5b052; font-size: 50rpx"
-              >{{ user.tokenBalance }}
+              >{{ formatPrice(user.tokenBalance) }}
             </view>
           </view>
           <view>
@@ -153,7 +153,6 @@
     <!-- 按钮 -->
     <view style="display: flex; justify-content: center; margin-top: 30rpx">
       <view class="btn" @click="payClick">立即充值</view>
-      <!-- <view class="btn" @click="showTeko"> jjjjjjj </view> -->
     </view>
   </view>
 </template>
@@ -165,6 +164,7 @@ import { selectsGoods } from "@/service/shop.js";
 import { happenTimeFun, formatFullTime } from "@/utils/time.js";
 import { getTokenCount } from "@/service/pay.js";
 import { payToken } from "@/utils/token/index.js";
+import { formatPrice } from "@/utils/time.js";
 export default {
   components: {
     NavigationBars,
@@ -246,6 +246,7 @@ export default {
     });
   },
   methods: {
+    formatPrice,
     happenTimeFun,
     formatFullTime,
     hander(item) {

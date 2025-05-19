@@ -33,7 +33,7 @@
       <view class="status-item" :class="{ active: currentStatus === 'settled' }" @click="switchStatus('settled')">已结算</view> -->
     </view>
 
-    <view class="amount-display">{{ displayAmount }}</view>
+    <view class="amount-display">{{ formatPrice(displayAmount) }}</view>
 
     <view class="bottom-stats">
       <view class="stat-item">
@@ -53,29 +53,10 @@
 </template>
 
 <script>
+import { formatPrice } from "@/utils/time.js";
 export default {
   name: "EarningsStatisticsCard",
   props: {
-    earningsData: {
-      type: Object,
-      default: () => ({
-        today: {
-          income: "11889.56",
-          pending: "7.12",
-          settled: "110.56",
-        },
-        month: {
-          income: "25000.00",
-          pending: "500.00",
-          settled: "20000.00",
-        },
-        total: {
-          income: "100000.00",
-          pending: "1000.00",
-          settled: "80000.00",
-        },
-      }),
-    },
     commission: {
       type: Object,
       default: {},
@@ -125,6 +106,7 @@ export default {
     },
   },
   methods: {
+    formatPrice,
     switchTab(tab) {
       this.currentTab = tab;
       this.$emit("tab-change", tab);

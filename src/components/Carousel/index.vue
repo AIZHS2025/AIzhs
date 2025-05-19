@@ -1,28 +1,34 @@
-/**
- * Ripple_Yu
- * 轮播图组件
- * 可接入点击跳转至 路由页面
- *
- */
+/** * Ripple_Yu * 轮播图组件 * 可接入点击跳转至 路由页面 * */
 <template>
   <view class="carousel-container">
-    <swiper class="carousel" 
-            :indicator-dots="false" 
-            :autoplay="true" 
-            :interval="3000" 
-            :duration="500"
-            :circular="true"
-            @change="onSwiperChange">
-      <swiper-item v-for="(item, index) in carouselList" :key="index" @click="handleItemClick(index)">
-        <image :src="item.imageUrl" class="carousel-image" mode="aspectFill"></image>
+    <swiper
+      class="carousel"
+      :indicator-dots="false"
+      :autoplay="true"
+      :interval="3000"
+      :duration="500"
+      :circular="true"
+      @change="onSwiperChange"
+    >
+      <swiper-item
+        v-for="(item, index) in carouselList"
+        :key="index"
+        @click="handleItemClick(index)"
+      >
+        <image
+          :src="item.imageUrl"
+          class="carousel-image"
+          mode="aspectFill"
+        ></image>
       </swiper-item>
     </swiper>
     <view class="indicator">
-      <view 
-        v-for="(item, index) in carouselList" 
-        :key="index" 
+      <view
+        v-for="(item, index) in carouselList"
+        :key="index"
         class="dot"
-        :class="{ active: current === index }">
+        :class="{ active: current === index }"
+      >
       </view>
     </view>
   </view>
@@ -30,41 +36,48 @@
 
 <script>
 export default {
-  name: 'Carousel',
+  name: "Carousel",
   data() {
     return {
       current: 0,
       carouselList: [
-			{
-				id: 1,
-				imageUrl: 'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/lunbo6.jpg'
-			},
-			{
-				id: 2,
-				imageUrl: 'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/home/carousel4-footer1/carousel1.jpg',
-			},
-			{
-				id: 3,
-				imageUrl: 'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/home/carousel4-footer1/carousel2.jpg',
-			},
-			{
-				id: 4,
-				imageUrl: 'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/home/carousel4-footer1/carousel3.jpg',
-			},
-			{
-				id: 5,
-				imageUrl: 'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/home/carousel4-footer1/carousel4-footer1-two.png',
-			},
-			{
-				id: 6,
-				imageUrl: 'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/home/carousel4-footer1/lunbo1.png',
-			},
-			{
-				id: 7,
-				imageUrl: 'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/home/carousel4-footer1/lunbo2.png',
-			}
-				]
-    }
+        {
+          id: 1,
+          imageUrl:
+            "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/lunbo6.jpg",
+        },
+        {
+          id: 2,
+          imageUrl:
+            "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/home/carousel4-footer1/carousel1.jpg",
+        },
+        {
+          id: 3,
+          imageUrl:
+            "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/home/carousel4-footer1/carousel2.jpg",
+        },
+        {
+          id: 4,
+          imageUrl:
+            "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/home/carousel4-footer1/carousel3.jpg",
+        },
+        {
+          id: 5,
+          imageUrl:
+            "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/home/carousel4-footer1/carousel4-footer1-two.png",
+        },
+        {
+          id: 6,
+          imageUrl:
+            "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/home/carousel4-footer1/lunbo1.png",
+        },
+        {
+          id: 7,
+          imageUrl:
+            "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/home/carousel4-footer1/lunbo2.png",
+        },
+      ],
+    };
   },
   methods: {
     onSwiperChange(e) {
@@ -72,37 +85,37 @@ export default {
     },
     handleItemClick(index) {
       // 这里可以添加其他处理逻辑打开导航
-      this.$emit('item-click', this.carouselList[index]);
-    }
-  }
-}
+      this.$emit("item-click", this.carouselList[index]);
+    },
+  },
+};
 </script>
 
 <style scoped>
 .carousel-container {
   margin: 32rpx auto 0 auto;
   position: relative;
-  width: 100%; 
-  height: 288rpx; 
+  width: 100%;
+  height: 288rpx;
   margin-top: 180rpx;
 }
 
 .carousel {
   width: 100%;
   height: 100%;
-  border-radius: 60rpx; 
+  border-radius: 60rpx;
   overflow: hidden;
 }
 
 .carousel-image {
   width: 100%;
   height: 100%;
-  border-radius: 60rpx; 
+  border-radius: 60rpx;
 }
 
 .indicator {
   position: absolute;
-  bottom: 30rpx; 
+  bottom: 30rpx;
   left: 0;
   right: 0;
   display: flex;
@@ -116,13 +129,13 @@ export default {
   height: 16rpx;
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 50%;
-  margin: 0 10rpx; 
+  margin: 0 10rpx;
   transition: all 0.3s;
 }
 
 .dot.active {
-  width: 32rpx; 
+  width: 32rpx;
   background-color: #ffffff;
-  border-radius: 8rpx; 
+  border-radius: 8rpx;
 }
 </style>

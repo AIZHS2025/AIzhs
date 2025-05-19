@@ -83,6 +83,7 @@
 <script>
 import NavigationBars from "@/components/navigation-bars/index.vue";
 import { withdraw } from "@/service/pay.js";
+import { formatPrice } from "@/utils/time.js";
 export default {
   components: {
     NavigationBars,
@@ -117,18 +118,19 @@ export default {
   },
   onLoad() {
     const { balance } = uni.getStorageSync("data");
-    this.availableWithdrawalAmount = balance;
+    this.availableWithdrawalAmount = formatPrice(balance);
     console.log(balance);
     this.select = this.radio[0];
   },
   methods: {
+    formatPrice,
     onPackClick() {
       uni.navigateBack({
         delta: 1,
       });
     },
     withdrawAll() {
-      this.price = this.availableWithdrawalAmount.toString();
+      this.price = formatPrice(this.availableWithdrawalAmount.toString());
     },
     choose(item) {
       this.select = item;
@@ -137,26 +139,34 @@ export default {
     },
     //用户提现
     withdrawDepositClick() {
-      uni.showLoading({
-        title: "提现中...",
-        mask: true,
-      });
-      const { id } = uni.getStorageSync("data");
-      withdraw(id, this.price)
-        .then((res) => {
-          uni.hideLoading();
-          uni.showToast({
-            title: "提现成功",
-            icon: "none",
-          });
-        })
-        .catch((err) => {
-          uni.hideLoading();
-          uni.showToast({
-            title: "提现失败: ",
-            icon: "none",
-          });
+      if (this.availableWithdrawalAmount >= this.price) {
+        uni.showLoading({
+          title: "提现中...",
+          mask: true,
         });
+        const { id } = uni.getStorageSync("data");
+        const amount = Math.round(this.price * 100);
+        withdraw(id, amount)
+          .then((res) => {
+            uni.hideLoading();
+            uni.showToast({
+              title: "提现成功",
+              icon: "none",
+            });
+          })
+          .catch((err) => {
+            uni.hideLoading();
+            uni.showToast({
+              title: "提现失败: ",
+              icon: "none",
+            });
+          });
+      } else {
+        uni.showToast({
+          title: "超过可提现金额",
+          icon: "none",
+        });
+      }
     },
   },
 };

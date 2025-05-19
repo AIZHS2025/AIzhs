@@ -44,7 +44,6 @@
 <script>
 import PopularCoursesList1 from "../PopularCourses/PopularCoursesList1.vue";
 import PopularCoursesList2 from "../PopularCourses/PopularCoursesList2.vue";
-import { postPopularCourses } from "@/service/index.js";
 
 export default {
   name: "PopularCourses",
@@ -93,24 +92,6 @@ export default {
     oncourse(item) {
       this.$emit("oncourses", item);
     },
-
-    // popularCourses() {
-    //   postPopularCourses()
-    //     .then((res) => {
-    //       if (res.data) {
-    //         console.log("首页课程", res.data);
-    //         this.CourseList1 = res.data
-    //           .filter((item) => item.type === 1)
-    //           .slice(0, 3);
-    //         this.CourseList2 = res.data
-    //           .filter((item) => item.type === 2)
-    //           .slice(0, 3);
-    //       }
-    //     })
-    //     .catch((err) => {
-    //       console.error("首页课程", err);
-    //     });
-    // },
 
     // 计算占位符高度
     updatePlaceholderHeight() {

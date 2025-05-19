@@ -28,11 +28,13 @@
         style="height: 40rpx; display: flex; align-items: center"
       >
         <view>累计收入(元)</view>
-        <view style="margin-left: 40rpx">{{ user.total_earnings }}</view>
+        <view style="margin-left: 40rpx">{{
+          formatPrice(user.total_earnings)
+        }}</view>
       </view>
       <view class="button_max_box">
         <view style="width: 400rpx; line-height: 46rpx"
-          >可提现金额：{{ user.balance }}</view
+          >可提现金额：{{ formatPrice(user.balance) }}</view
         >
         <view class="button_box" @click="withdrawalClick">
           <image
@@ -47,6 +49,7 @@
 </template>
 
 <script>
+import { formatPrice } from "@/utils/time.js";
 export default {
   name: "PersonalInformationCard",
   props: {
@@ -59,6 +62,7 @@ export default {
     return {};
   },
   methods: {
+    formatPrice,
     withdrawalClick() {
       uni.navigateTo({
         url: "/pages/withdrawal/index",
