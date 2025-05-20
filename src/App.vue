@@ -4,10 +4,15 @@ export default {
   globalData: {
     userInfo: null,
     cloudConnected: false,
+    // 添加全局图片预加载方法
+    preloadImage: null,
   },
 
   onLaunch: function () {
     console.log("App Launch");
+    // 初始化全局预加载方法
+    this.globalData.preloadImage = this.preloadImage;
+    
     uni.login({
       provider: "weixin", // 微信小程序登录
       success: function (res) {
@@ -84,6 +89,48 @@ export default {
     console.log("App Hide");
   },
   methods: {
+    /**
+     * 全局图片预加载方法
+     * @param {string} src - 图片路径
+     * @param {Object} options - 配置选项
+     * @param {boolean} options.isCloudStorage - 是否为云存储图片
+     * @returns {Promise} 返回预加载完成的Promise
+     */
+    async preloadImage(src, options = {}) {
+      const { isCloudStorage = false } = options;
+      
+      try {
+        let imageUrl = src;
+        if (isCloudStorage) {
+          // 获取云存储图片的临时访问URL
+          const urlRes = await uniCloud.getTempFileURL({
+            fileList: [src]
+          });
+          
+          if (urlRes.fileList && urlRes.fileList.length > 0) {
+            imageUrl = urlRes.fileList[0].tempFileURL;
+          }
+        }
+
+        return new Promise((resolve, reject) => {
+          uni.getImageInfo({
+            src: imageUrl,
+            success: () => {
+              console.log(`图片预加载成功: ${src}`);
+              resolve(imageUrl);
+            },
+            fail: (err) => {
+              console.error(`图片预加载失败: ${src}`, err);
+              reject(err);
+            }
+          });
+        });
+      } catch (error) {
+        console.error('预加载图片时发生错误:', error);
+        return Promise.reject(error);
+      }
+    },
+
     // 初始化应用
     initApp() {
       // 尝试恢复用户状态

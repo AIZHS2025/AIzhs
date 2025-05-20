@@ -3,9 +3,9 @@
     <!-- 引入 顶部导航栏 -->
     <navigation-bars
       color="black"
+      :backgroundColor="color"
       viscosity="true"
       title="智汇社AI助手集"
-      :backgroundColor="color"
       @pack="onPackClick"
     />
 

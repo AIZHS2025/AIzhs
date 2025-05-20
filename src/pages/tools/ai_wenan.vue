@@ -937,6 +937,3 @@ export default {
 	}
 }
 </style>
-
-
-

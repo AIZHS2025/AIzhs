@@ -698,6 +698,3 @@ export default {
 	}
 }
 </style>
-
-
-

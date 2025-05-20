@@ -1,5 +1,5 @@
 <template>
-	<view class="container" style="padding: 0 20rpx">
+	<view class="container" style="color: white">
 		<!-- 引入外部 顶部导航栏 -->
 		<navigation-bars 
 			color="#171717" 

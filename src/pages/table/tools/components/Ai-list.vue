@@ -17,7 +17,18 @@
             <text class="ai-card-desc">{{ item.desc }}</text>
             <view class="ai-card-author">{{ item.author }}</view>
           </view>
-          <image class="ai-card-img" :src="item.img" mode="aspectFill"></image>
+          <view class="ai-card-img-wrapper">
+            <!-- 骨架屏 -->
+            <view v-if="!item.imgLoaded" class="skeleton-img"></view>
+            <!-- 实际图片 -->
+            <image 
+              class="ai-card-img" 
+              :class="{ 'img-loaded': item.imgLoaded }"
+              :src="item.tempUrl || item.img" 
+              mode="aspectFill"
+              @load="onImageLoad(idx)"
+            ></image>
+          </view>
         </view>
       </view>
     </view>
@@ -291,7 +302,33 @@ export default {
     toggleExpand() {
       this.expanded = !this.expanded;
     },
+    // 图片加载完成处理
+    onImageLoad(index) {
+      this.$set(this.aiList[index], 'imgLoaded', true);
+    },
+    // 预加载图片
+    async preloadImages() {
+      const app = getApp();
+      const preloadPromises = this.aiList.map(async (item, index) => {
+        try {
+          const tempUrl = await app.globalData.preloadImage(item.img, { isCloudStorage: true });
+          this.$set(this.aiList[index], 'tempUrl', tempUrl);
+        } catch (error) {
+          console.error(`预加载图片失败: ${item.img}`, error);
+        }
+      });
+      
+      await Promise.all(preloadPromises);
+    },
   },
+  created() {
+    // 初始化图片加载状态
+    this.aiList.forEach(item => {
+      this.$set(item, 'imgLoaded', false);
+    });
+    // 预加载图片
+    this.preloadImages();
+  }
 };
 </script>
 
@@ -357,15 +394,53 @@ export default {
     opacity: 0.7;
     display: block;
   }
-  .ai-card-img {
+  .ai-card-img-wrapper {
     width: 130rpx;
     height: 130rpx;
-    border-radius: 50%;
-    object-fit: cover;
+    position: relative;
     margin-left: 12rpx;
     flex-shrink: 0;
+  }
+
+  .ai-card-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
     position: relative;
     z-index: 2;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    
+    &.img-loaded {
+      opacity: 1;
+    }
+  }
+
+  .skeleton-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(
+      90deg,
+      rgba(190, 190, 190, 0.2) 25%,
+      rgba(129, 129, 129, 0.24) 37%,
+      rgba(190, 190, 190, 0.2) 63%
+    );
+    background-size: 400% 100%;
+    animation: skeleton-loading 1.4s ease infinite;
+  }
+
+  @keyframes skeleton-loading {
+    0% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0 50%;
+    }
   }
 
   /* 展开/收起按钮样式 */
