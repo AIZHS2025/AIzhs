@@ -23,3 +23,12 @@ export function plantInformation(id) {
     data: { id },
   });
 }
+// /index.php/getHomePageResources
+// 首页
+export function getHomePageResources() {
+  return request({
+    url: '/index.php/getHomePageResources',
+    method: "GET",
+    dataL: {}
+  })
+}

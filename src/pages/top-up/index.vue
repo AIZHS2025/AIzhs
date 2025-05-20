@@ -61,12 +61,16 @@
               src="https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/user/user-pricce.png"
               mode="scaleToFill"
             />
-            <view class="user-center-button-left-item">
+            <view class="user-center-button-left-item" v-if="grade">
+              <text style="font-size: 32rpx; font-weight: bold">会员中心</text>
+              <text style="color: #666666">距离下次升级100</text>
+            </view>
+            <view class="user-center-button-left-item" v-else>
               <text style="font-size: 32rpx; font-weight: bold">会员中心</text>
               <text style="color: #666666">开通立享多重特权</text>
             </view>
           </view>
-          <view class="user-center-button-right">
+          <view class="user-center-button-right" v-if="grade === false">
             <view
               class="user-center-button-right-item"
               @click="activateNowClick"

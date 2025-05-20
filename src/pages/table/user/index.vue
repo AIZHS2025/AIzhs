@@ -256,7 +256,6 @@
 <script>
 import LoginPopUp from "@/components/loginPopUp/index.vue";
 import { login, bindUser } from "@/service/login.js";
-import { order } from "@/service/pay.js";
 import { pay } from "@/utils/pay/index.js";
 import { selectsGoods } from "@/service/shop.js";
 export default {
@@ -348,13 +347,7 @@ export default {
         });
     },
     //订单
-    orderClick() {
-      order(this.userInfo.open_id, 1)
-        .then((res) => {
-          console.log("订单成功", res.data);
-        })
-        .catch((err) => console.error("订单失败", err));
-    },
+    orderClick() {},
 
     // 处理登录
     handleLogin() {

@@ -30,7 +30,10 @@
       :bounce="true"
       :fast-deceleration="true"
     >
-      <Carousel @item-click="onCarouselItemClick" />
+      <Carousel
+        :banner="HomePagedata.banner_carousel"
+        @item-click="onCarouselItemClick"
+      />
       <ToolBar @id-service="handerServiceClick" />
       <PopularCourses
         :CourseList1="CourseList1"
@@ -76,7 +79,7 @@ import PopularCourses from "@/components/PopularCourses/index.vue";
 import KnowledgePlanet from "@/components/KnowledgePlanet/index.vue";
 import BottomFigure from "@/components/BottomFigure/index.vue";
 import { openId, login } from "@/service/login.js";
-import { postPopularCourses } from "@/service/index.js";
+import { postPopularCourses, getHomePageResources } from "@/service/index.js";
 import { pay } from "@/utils/pay/index.js";
 export default {
   components: {
@@ -98,11 +101,13 @@ export default {
       CourseList2: [],
       kList1: [],
       kList2: [],
+      HomePagedata: {},
     };
   },
   onLoad() {
-    this.popularCourses();
-    this.knowledgePlanet();
+    // this.popularCourses();
+    // this.knowledgePlanet();
+    this.home();
     // 加载页面时自动执行隐形登录
     this.silentLogin();
   },
@@ -340,6 +345,16 @@ export default {
         .catch((err) => {
           console.error("首页课程", err);
         });
+    },
+    home() {
+      getHomePageResources().then((res) => {
+        this.HomePagedata = res.data;
+        this.CourseList1 = res.data.popular_courses.gettingStarted.slice(0, 3);
+        this.CourseList2 = res.data.popular_courses.featured.slice(0, 3);
+        this.kList1 = res.data.knowledge_planet.official.slice(0, 3);
+        this.kList2 = res.data.knowledge_planet.community.slice(0, 3);
+        console.log("res", res.data);
+      });
     },
   },
 };

@@ -11,20 +11,16 @@
       @change="onSwiperChange"
     >
       <swiper-item
-        v-for="(item, index) in carouselList"
+        v-for="(item, index) in banner"
         :key="index"
         @click="handleItemClick(index)"
       >
-        <image
-          :src="item.imageUrl"
-          class="carousel-image"
-          mode="aspectFill"
-        ></image>
+        <image :src="item.img" class="carousel-image" mode="aspectFill"></image>
       </swiper-item>
     </swiper>
     <view class="indicator">
       <view
-        v-for="(item, index) in carouselList"
+        v-for="(item, index) in banner"
         :key="index"
         class="dot"
         :class="{ active: current === index }"
@@ -37,46 +33,15 @@
 <script>
 export default {
   name: "Carousel",
+  props: {
+    banner: {
+      type: Array,
+      default: [],
+    },
+  },
   data() {
     return {
       current: 0,
-      carouselList: [
-        {
-          id: 1,
-          imageUrl:
-            "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/lunbo6.jpg",
-        },
-        {
-          id: 2,
-          imageUrl:
-            "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/home/carousel4-footer1/carousel1.jpg",
-        },
-        {
-          id: 3,
-          imageUrl:
-            "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/home/carousel4-footer1/carousel2.jpg",
-        },
-        {
-          id: 4,
-          imageUrl:
-            "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/home/carousel4-footer1/carousel3.jpg",
-        },
-        {
-          id: 5,
-          imageUrl:
-            "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/home/carousel4-footer1/carousel4-footer1-two.png",
-        },
-        {
-          id: 6,
-          imageUrl:
-            "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/home/carousel4-footer1/lunbo1.png",
-        },
-        {
-          id: 7,
-          imageUrl:
-            "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/home/carousel4-footer1/lunbo2.png",
-        },
-      ],
     };
   },
   methods: {
@@ -85,7 +50,7 @@ export default {
     },
     handleItemClick(index) {
       // 这里可以添加其他处理逻辑打开导航
-      this.$emit("item-click", this.carouselList[index]);
+      this.$emit("item-click", this.banner[index]);
     },
   },
 };
