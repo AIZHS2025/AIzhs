@@ -40,14 +40,14 @@ export default {
           iconClass: "blue",
           url: "/pages/distribution_order_list/index",
         },
-        {
-          title: "我的佣金",
-          subtitle: "查看我的收入",
-          iconSrc:
-            "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/distribution/图标 5@2x.png",
-          iconClass: "dark-blue",
-          url: "/pages/income/index",
-        },
+        // {
+        //   title: "我的佣金",
+        //   subtitle: "查看我的收入",
+        //   iconSrc:
+        //     "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/distribution/图标 5@2x.png",
+        //   iconClass: "dark-blue",
+        //   url: "/pages/income/index",
+        // },
         {
           title: "我的团队",
           subtitle: "查看我的团队",
@@ -56,14 +56,14 @@ export default {
           iconClass: "purple",
           url: "/pages/distribution_personnel_list/index",
         },
-        {
-          title: "我的业绩",
-          subtitle: "查看我的业绩",
-          iconSrc:
-            "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/distribution/图标 7@2x.png",
-          iconClass: "orange",
-          url: "/pages/performance/index",
-        },
+        // {
+        //   title: "我的业绩",
+        //   subtitle: "查看我的业绩",
+        //   iconSrc:
+        //     "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/distribution/图标 7@2x.png",
+        //   iconClass: "orange",
+        //   url: "/pages/performance/index",
+        // },
         {
           title: "个人名片",
           subtitle: "查看我的名片",
@@ -72,14 +72,14 @@ export default {
           iconClass: "blue",
           url: "/pages/business-card/index",
         },
-        {
-          title: "我的二维码",
-          subtitle: "查看我的二维码",
-          iconSrc:
-            "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/distribution/图标 8@2x.png",
-          iconClass: "blue",
-          url: "/pages/personal-card/index",
-        },
+        // {
+        //   title: "我的二维码",
+        //   subtitle: "查看我的二维码",
+        //   iconSrc:
+        //     "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/distribution/图标 8@2x.png",
+        //   iconClass: "blue",
+        //   url: "/pages/personal-card/index",
+        // },
       ],
     };
   },

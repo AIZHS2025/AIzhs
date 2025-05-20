@@ -32,7 +32,6 @@
         "navigationStyle": "custom"
       }
     },
-
     {
       "path": "pages/tools/gushihua",
       "style": {
@@ -42,7 +41,6 @@
         "navigationStyle": "custom"
       }
     },
-
     {
       "path": "pages/tools/yangsheng",
       "style": {
@@ -52,7 +50,6 @@
         "navigationStyle": "custom"
       }
     },
-
     {
       "path": "pages/tools/sptq",
       "style": {
@@ -62,7 +59,6 @@
         "navigationStyle": "custom"
       }
     },
-
     {
       "path": "pages/tools/douyinbaokuanwenan",
       "style": {
@@ -72,7 +68,6 @@
         "navigationStyle": "custom"
       }
     },
-
     {
       "path": "pages/tools/ai_wenan",
       "style": {
@@ -80,7 +75,6 @@
         "navigationStyle": "custom"
       }
     },
-
     {
       "path": "pages/coursePlanet/index",
       "style": {
@@ -89,7 +83,6 @@
         "navigationBarTextStyle": "black"
       }
     },
-
     {
       "path": "pages/earn_commission/index",
       "style": {
@@ -98,12 +91,11 @@
         "navigationBarTextStyle": "black"
       }
     },
-
     {
       "path": "pages/table/learn/index",
       "style": {
         "navigationBarTitleText": "课程星球",
-         "navigationBarBackgroundColor": "#93D2F3",
+        "navigationBarBackgroundColor": "#93D2F3",
         "navigationBarTextStyle": "black"
       }
     },
@@ -413,6 +405,18 @@
       }
     },
     {
+      "path": "pages/set/index",
+      "style": {
+        "navigationBarTitleText": "设置"
+      }
+    },
+    {
+      "path": "pages/set/about",
+      "style": {
+        "navigationBarTitleText": "关于我们"
+      }
+    },
+    {
       "path": "pages/topup-success/index",
       "style": {
         "navigationBarTitleText": "充值成功"
@@ -459,7 +463,7 @@
         "pagePath": "pages/table/share/index",
         "text": "知识星球",
         "iconPath": "static/tabbar/user.png",
-        "selectedIconPath": "static/tabbar/user-active.png" 
+        "selectedIconPath": "static/tabbar/user-active.png"
       },
       {
         "pagePath": "pages/table/user/index",

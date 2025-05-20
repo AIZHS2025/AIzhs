@@ -161,7 +161,7 @@
       </view>
       <text>操盘手数据中心</text>
     </view>
-    <view class="distribution_box">
+    <!-- <view class="distribution_box">
       <view class="image_box22">
         <image
           :src="'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/distribution/管理技术 1@2x.png'"
@@ -170,7 +170,7 @@
       </view>
 
       <text>我的操盘手名片</text>
-    </view>
+    </view> -->
 
     <!-- 菜单列表 -->
     <view class="menu-list">
@@ -202,7 +202,7 @@
           mode="aspectFit"
         ></image>
       </view>
-      <view class="menu-item">
+      <!-- <view class="menu-item">
         <view class="menu-left">
           <image
             :src="'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/user/member.png'"
@@ -215,8 +215,8 @@
           src="https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/home/zhong/right-arrow.png"
           mode="aspectFit"
         ></image>
-      </view>
-      <view class="menu-item">
+      </view> -->
+      <view class="menu-item" @click="setClick">
         <view class="menu-left">
           <image
             :src="'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/user/settings.png'"
@@ -230,7 +230,7 @@
           mode="aspectFit"
         ></image>
       </view>
-      <view class="menu-item" @click="orderClick">
+      <!-- <view class="menu-item" @click="orderClick">
         <view class="menu-left">
           <image
             :src="'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/user/service.png'"
@@ -243,7 +243,7 @@
           src="https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/home/zhong/right-arrow.png"
           mode="aspectFit"
         ></image>
-      </view>
+      </view> -->
     </view>
     <login-pop-up
       @login="onLogin"
@@ -385,6 +385,13 @@ export default {
       // uni.navigateTo({
       //   url: '/pages/vip/detail'
       // })
+    },
+    // 设置
+    setClick() {
+      console.log("点击了数字");
+      uni.navigateTo({
+        url: "/pages/set/index",
+      });
     },
     paytest() {
       this.order_type = 1;
