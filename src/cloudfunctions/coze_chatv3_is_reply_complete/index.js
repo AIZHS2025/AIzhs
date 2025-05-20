@@ -64,7 +64,12 @@ exports.main = async (event, context) => {
             is_completed: ['completed', 'failed', 'canceled'].includes(chatData.status),
             usage: chatData.usage,
             last_error: chatData.last_error,
-            completed_at: chatData.completed_at
+            completed_at: chatData.completed_at,
+            token: {
+                input_count: chatData.usage?.input_count || 0,
+                output_count: chatData.usage?.output_count || 0,
+                token_count: chatData.usage?.token_count || 0
+            }
         };
 
         console.log('返回到前端的数据:', responseData);
