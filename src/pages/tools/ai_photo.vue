@@ -1,7 +1,9 @@
 <template>
-	<view class="container" style="padding: 0 20rpx">
+	<view class="container" style="color: white">
 		<!-- 引入外部 顶部导航栏 -->
 		<navigation-bars 
+			:backgroundColor="color"
+			viscosity="true"
 			color="#171717" 
 			font-size-30 
 			title="AI图片生成助手" 
@@ -72,18 +74,23 @@ export default {
 	data() {
 		return {
 			prompt: '',
+			color:"",
 			loading: false,
 			completedResponses: [],
 			taskId: null,
 			checkStatusInterval: null,
 			savedPrompt: '',
 			conversationMessages: [],
-			userAvatar: 'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/user-avatar.png',
+			userAvatar: 'cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/hello.png',
 			botAvatar: 'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/jiqiren-big.png',
 			initialBotMessage: '请在下方输入您想要的图片描述',
 			currentResponse: null,
 			lastProcessedTimestamp: 0
 		}
+	},
+	onPageScroll(e) {
+	  this.scrollTop = e.scrollTop;
+	  this.color = e.scrollTop > 20 ? "white" : "transparent";
 	},
 	methods: {
 		backPage() {
