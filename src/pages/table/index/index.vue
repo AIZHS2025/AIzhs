@@ -79,7 +79,7 @@ import PopularCourses from "@/components/PopularCourses/index.vue";
 import KnowledgePlanet from "@/components/KnowledgePlanet/index.vue";
 import BottomFigure from "@/components/BottomFigure/index.vue";
 import { openId, login } from "@/service/login.js";
-import { postPopularCourses, getHomePageResources } from "@/service/index.js";
+import { getHomePageResources } from "@/service/index.js";
 import { pay } from "@/utils/pay/index.js";
 export default {
   components: {
@@ -105,8 +105,6 @@ export default {
     };
   },
   onLoad() {
-    // this.popularCourses();
-    // this.knowledgePlanet();
     this.home();
     // 加载页面时自动执行隐形登录
     this.silentLogin();
@@ -309,42 +307,6 @@ export default {
         title: "更多内容开发中",
         icon: "none",
       });
-    },
-    knowledgePlanet() {
-      postPopularCourses()
-        .then((res) => {
-          if (res.data) {
-            console.log("知识星球", res.data);
-            this.kList1 = res.data
-              .filter((item) => item.type === 1)
-              .slice(0, 3);
-            this.kList2 = res.data
-              .filter((item) => item.type === 2)
-              .slice(0, 3);
-          }
-        })
-        .catch((err) => {
-          console.error("知识星球", err);
-        });
-    },
-
-    popularCourses() {
-      postPopularCourses()
-        .then((res) => {
-          if (res.data) {
-            console.log("首页课程", res.data);
-            this.CourseList1 = res.data
-              .filter((item) => item.type === 1)
-              .slice(0, 3);
-            console.log("this.CourseList1", this.CourseList1);
-            this.CourseList2 = res.data
-              .filter((item) => item.type === 2)
-              .slice(0, 3);
-          }
-        })
-        .catch((err) => {
-          console.error("首页课程", err);
-        });
     },
     home() {
       getHomePageResources().then((res) => {

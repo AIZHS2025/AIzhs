@@ -82,7 +82,7 @@ export default {
       color: "",
       showModal: true,
       currentBanner: 0,
-      searchKeyword:"",
+      searchKeyword: "",
       // 兴趣赛道对应的页面路径
       interestPagePath: "/pages/table/index/interest",
 
@@ -105,11 +105,11 @@ export default {
     // AI搜索框 处理输入、搜索、跳转逻辑
     onInput(value) {
       console.log("Input value:", value);
-      this.searchKeyword=value;
+      this.searchKeyword = value;
     },
     onSearch(value) {
       console.log("Search value:", value);
-      this.searchKeyword=value;
+      this.searchKeyword = value;
     },
     onNavigate(value) {
       console.log("Navigate value:", value);
