@@ -267,6 +267,9 @@ export default {
       this.stablePay().then((res) => {
         this.user = uni.getStorageSync("data");
         this.grade = uni.getStorageSync("vip");
+        uni.navigateTo({
+          url: "/pages/topup-fail/index",
+        });
       });
     },
     onPackClick() {
@@ -306,6 +309,9 @@ export default {
       this.stablePay().then((res) => {
         this.user = uni.getStorageSync("data");
         this.grade = uni.getStorageSync("vip");
+        uni.navigateTo({
+          url: "/pages/topup-success/index",
+        });
       });
     },
     // 获取Token余额

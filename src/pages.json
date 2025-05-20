@@ -411,6 +411,18 @@
         "navigationBarTitleText": "工具中心",
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/topup-success/index",
+      "style": {
+        "navigationBarTitleText": "充值成功"
+      }
+    },
+    {
+      "path": "pages/topup-fail/index",
+      "style": {
+        "navigationBarTitleText": "充值失败"
+      }
     }
   ],
   "globalStyle": {
