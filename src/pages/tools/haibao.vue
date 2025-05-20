@@ -1,5 +1,5 @@
 <template>
-	<view class="container" style="color: white">
+	<view class="container" style="padding: 0 20rpx">
 		<!-- 引入外部 顶部导航栏 -->
 		<navigation-bars 
 			color="#171717" 
@@ -154,7 +154,7 @@ export default {
 					name: 'coze_request',
 					data: {
 						token: 'pat_tu253KJPlSsaCx1YFunZ00wr8VmJUd3z7hujxXd79Ag7JIgNtHw0pC6G58i63F8S',
-						workflowId: '7500449436821782537',
+						workflowId: '7499285733623349302',
 						parameters: {
 							prompt: this.savedPrompt
 						}
@@ -204,7 +204,7 @@ export default {
 						name: 'coze_worker',
 						data: {
 							token: 'pat_tu253KJPlSsaCx1YFunZ00wr8VmJUd3z7hujxXd79Ag7JIgNtHw0pC6G58i63F8S',
-							workflowId: '7500449436821782537',
+							workflowId: '7499285733623349302',
 							execute_id: this.taskId
 						}
 					});
@@ -212,6 +212,7 @@ export default {
 					if (result.result.code === 0) {
 						const task = result.result.data;
 						console.log('任务状态:', task.status);
+						console.log('Token值:', task.token);
 						
 						if (task.status === 'Success') {
 							// 任务完成

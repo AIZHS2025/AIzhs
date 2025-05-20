@@ -4,7 +4,7 @@
 		<navigation-bars 
 			color="#171717" 
 			font-size-30 
-			title="抖音链接转文案" 
+			title="爆火历史事件独白图文一站式生成助手" 
 			@pack="backPage" 
 			:image="'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/返回.png'" />
 
@@ -42,7 +42,7 @@
 				type="text" 
 				v-model="prompt" 
 				:disabled="loading" 
-				placeholder="输出您的链接..." 
+				placeholder="输入您的历史话题..." 
 				placeholder-class="placeholder-style"
 				@confirm="handleSendMessage" 
 			/>
@@ -79,7 +79,7 @@ export default {
 			conversationMessages: [],
 			userAvatar: 'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/user-avatar.png',
 			botAvatar: 'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/jiqiren-big.png',
-			initialBotMessage: '您可以试着输出您想要提取的链接',
+			initialBotMessage: '您可以试着输出历史事件，例如：赤壁之战',
 			currentResponse: null,
 			lastProcessedTimestamp: 0
 		}
@@ -137,12 +137,11 @@ export default {
 			}, 100);
 			
 			try {
-				// 调用 coze_request 云函数创建任务
 				const result = await wx.cloud.callFunction({
 					name: 'coze_request',
 					data: {
 						token: 'pat_tu253KJPlSsaCx1YFunZ00wr8VmJUd3z7hujxXd79Ag7JIgNtHw0pC6G58i63F8S',
-						workflowId: '7496477495802806311',
+						workflowId: '7490583402404839439',
 						parameters: {
 							prompt: this.savedPrompt
 						}
@@ -164,7 +163,6 @@ export default {
 					content: `生成失败，请稍后重试`,
 					timestamp: Date.now()
 				});
-				
 				this.loading = false;
 			}
 		},
@@ -184,7 +182,7 @@ export default {
 						name: 'coze_worker',
 						data: {
 							token: 'pat_tu253KJPlSsaCx1YFunZ00wr8VmJUd3z7hujxXd79Ag7JIgNtHw0pC6G58i63F8S',
-							workflowId: '7496477495802806311',
+							workflowId: '7490583402404839439',
 							execute_id: this.taskId
 						}
 					});
@@ -555,6 +553,8 @@ export default {
 	}
 }
 </style>
+
+
 
 
 

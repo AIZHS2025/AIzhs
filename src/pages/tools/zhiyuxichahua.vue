@@ -1,5 +1,5 @@
 <template>
-	<view class="container" style="color: white">
+	<view class="container" style="padding: 0 20rpx">
 		<!-- 引入外部 顶部导航栏 -->
 		<navigation-bars 
 			color="#171717" 
@@ -192,6 +192,7 @@ export default {
 					if (result.result.code === 0) {
 						const task = result.result.data;
 						console.log('任务状态:', task.status);
+						console.log('Token值:', task.token);
 						
 						if (task.status === 'Success') {
 							clearInterval(this.checkStatusInterval);

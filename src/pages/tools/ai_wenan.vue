@@ -312,7 +312,14 @@ export default {
 					if (result && result.result && result.result.code === 0) {
 						const status = result.result.data;
 						console.log('回复状态:', status.is_completed);
-						console.log('Token值:', status.token);
+						
+						// 更新token使用情况
+						if (status.token) {
+							const tokenUsage = {
+								total: status.token.token_count || 0
+							};
+							console.log('Token使用详情:', tokenUsage);
+						}
 						
 						if (status.is_completed) {
 							// 回复完成
@@ -937,3 +944,6 @@ export default {
 	}
 }
 </style>
+
+
+

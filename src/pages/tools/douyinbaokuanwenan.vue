@@ -1,459 +1,411 @@
 <template>
-	<view class="container">
+	<view class="container" style="padding: 0 20rpx">
 		<!-- 引入外部 顶部导航栏 -->
-		<navigation-bars
-			color="#171717"
-			title="抖音爆款文案生成"
-			@pack="backPage"
+		<navigation-bars 
+			color="#171717" 
+			font-size-30 
+			title="抖音爆款文案生成助手" 
+			@pack="backPage" 
 			:image="'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/返回.png'" />
 
 		<!-- 引入外部 智能助手小智 -->
 		<intelligent-assistant></intelligent-assistant>
 
-		<!-- 主要内容区域 -->
-		<scroll-view class="content-area" scroll-y="true" :scroll-top="scrollTop">
-			<!-- 欢迎区域 -->
-			<view class="welcome-area" v-if="!loading && completedResponses.length === 0">
-				<view class="robot-message">
-					<view class="robot-avatar">
-						<image src="https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/jiqiren-big.png" mode="aspectFit"></image>
-					</view>
-					<view class="message-bubble">
-						<view class="message-text">Hi, 我是您的抖音爆款文案生成助手</view>
-						<view class="message-text">请输入您需要生成文案的内容主题或关键词</view>
-						<view class="message-text">例如：养生饮食、美容护肤、生活妙招等</view>
-					</view>
-				</view>
-			</view>
+		<!-- 主要内容区域 - 固定高度 -->
+		<view class="chat-container">
+			<!-- 使用对话组件 -->
+			<conversation 
+				ref="conversationComp"
+				:messages.sync="conversationMessages" 
+				:user-avatar="userAvatar"
+				:bot-avatar="botAvatar"
+				:initial-message="initialBotMessage"
+				:show-initial-message="true"
+				@copy="copyText"
+				@media-detected="handleMediaDetected"
+			/>
 			
-			<!-- 历史消息 -->
-			<view class="message-list" v-if="completedResponses.length > 0">
-				<view class="message-item" v-for="(response, index) in completedResponses" :key="index">
-					<view class="user-message">
-						<view class="message-bubble">
-							<view class="message-text">{{ response.prompt }}</view>
-						</view>
-					</view>
-					
-					<view class="robot-message">
-						<view class="robot-avatar">
-							<image src="https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/jiqiren-big.png" mode="aspectFit"></image>
-						</view>
-						<view class="message-bubble">
-							<view class="message-text" v-if="response.text" v-html="formatContentWithHighlight(response.text)"></view>
-							
-							<!-- 视频展示 -->
-							<view class="video-container" v-if="response.videoUrl">
-								<video 
-									:src="response.videoUrl" 
-									controls 
-									show-center-play-btn="true" 
-									show-play-btn="true"
-									enable-progress-gesture
-									object-fit="contain"
-									class="video-player"
-								></video>
-								<view class="video-actions">
-									<button class="action-btn" @tap="copyVideoUrl(response.videoUrl)">复制视频链接</button>
-									<button class="action-btn" @tap="openInBrowser(response.videoUrl)">在浏览器打开</button>
-								</view>
-							</view>
-						</view>
-					</view>
-				</view>
-			</view>
-			
-			<!-- 加载中提示 -->
-			<view class="loading-container" v-if="loading">
-				<text class="loading-text">AI正在思考中...</text>
-			</view>
-		</scroll-view>
+			<!-- 处理数据的组件 -->
+			<response-formatter
+				ref="responseFormatter"
+				:responseData="currentResponse"
+				@response-processed="handleResponseProcessed"
+				@json-processed="handleJsonProcessed"
+				@media-detected="handleMediaDetected"
+				@links-detected="handleLinksDetected"
+			/>
+		</view>
 		
-		<!-- 底部输入区域 -->
+		<!-- 底部输入框区域 -->
 		<view class="input-area">
 			<input 
 				type="text" 
 				v-model="prompt" 
 				:disabled="loading" 
-				placeholder="请输入产品或服务需求" 
+				placeholder="选择你的赛道..." 
 				placeholder-class="placeholder-style"
-				@confirm="generateWenan" 
+				@confirm="handleSendMessage" 
 			/>
-			<button class="send-btn" :disabled="loading || !prompt.trim()" @tap="generateWenan">
+			<button class="send-btn" :disabled="loading || !prompt.trim()" @tap="handleSendMessage">
 				<image src="https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/跳转 (1).png" mode="aspectFit" class="send-icon"></image>
 			</button>
 		</view>
 	</view>
 </template>
 
+
 <script>
-// 引入外部组件
 import NavigationBars from "../../components/navigation-bars/index.vue";
 import IntelligentAssistant from "../table/tools/components/Intelligent-assistant.vue";
+import Conversation from "../table/tools/components/conversation.vue";
+import ResponseFormatter from "../table/tools/components/ResponseFormatter.vue";
 
 export default {
 	components: {
 		NavigationBars,
-		IntelligentAssistant
+		IntelligentAssistant,
+		Conversation,
+		ResponseFormatter
 	},
+
 	data() {
 		return {
 			prompt: '',
 			loading: false,
-			scrollTop: 0,
 			completedResponses: [],
 			taskId: null,
-			checkStatusInterval: null
+			checkStatusInterval: null,
+			savedPrompt: '',
+			conversationMessages: [],
+			userAvatar: 'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/user-avatar.png',
+			botAvatar: 'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/jiqiren-big.png',
+			initialBotMessage: '您可以试着输出您选择的赛道',
+			currentResponse: null,
+			lastProcessedTimestamp: 0
 		}
 	},
 	methods: {
-		// 导航栏 返回上一页
 		backPage() {
-			uni.navigateBack({
-				delta: 1
-			});
-		},
-		// 处理输入
-		onInput(e) {
-			this.prompt = e.detail.value;
-		},
-		
-		// 处理发送
-		handleSend() {
-			if (!this.prompt.trim() || this.loading) return;
-			this.generateWenan();
-		},
-		
-		// 格式化文案内容以便显示
-		formatContentWithHighlight(text) {
-			if (!text) return '';
-			
-			// 确保text是字符串
-			if (typeof text !== 'string') {
-				text = String(text);
-			}
-			
-			// 检查是否已有【文案 X】格式的内容
-			if (text.includes('【文案 ')) {
-				// 替换【文案 X】标签为带样式的HTML
-				return text.replace(/【文案\s+(\d+)】\n/g, 
-					'<div class="content-section-title">文案 $1</div>');
+			const pages = getCurrentPages();
+			if (pages.length > 1) {
+				uni.navigateBack({
+					delta: 1
+				});
 			} else {
-				// 处理没有【文案 X】格式的内容
-				// 检查是否有数字列表格式 (如 "1. 内容")
-				const hasNumberedList = /^\d+\.\s+/m.test(text);
-				
-				if (hasNumberedList) {
-					// 对编号内容进行格式化
-					return text.replace(/(\d+)\.\s+(.*?)(?=\n\d+\.|\n$|$)/gs, 
-						'<div class="content-section-title">文案 $1</div>$2<br>');
-				} else {
-					// 检查是否有多个段落
-					const paragraphs = text.split('\n\n');
-					if (paragraphs.length > 1) {
-						// 为每个段落添加标题
-						return paragraphs.map((p, index) => 
-							`<div class="content-section-title">文案 ${index + 1}</div>${p}`
-						).join('<br><br>');
-					}
-					
-					// 没有明确分段，保持原样
-					return text;
-				}
+				uni.switchTab({
+					url: '/pages/table/index/index'
+				});
 			}
 		},
 		
-		// 生成文案
-		async generateWenan() {
-			if (!this.prompt.trim()) {
+		async handleSendMessage() {
+			const message = this.prompt;
+			if (!message || !message.trim()) {
 				uni.showToast({
-					title: '请输入内容',
+					title: '请输入描述',
 					icon: 'none'
 				});
 				return;
 			}
 			
-			if (this.loading) return;
+			if (this.loading) {
+				uni.showToast({
+					title: '请等待当前请求完成',
+					icon: 'none'
+				});
+				return;
+			}
 			
+			this.savedPrompt = message;
 			this.loading = true;
 			this.taskId = null;
+			this.prompt = '';
+			
+			this.conversationMessages.push({
+				type: 'user',
+				content: message,
+				timestamp: Date.now()
+			});
+			
+			this.conversationMessages.push({
+				type: 'loading',
+				content: '正在生成中...'
+			});
+			
+			setTimeout(() => {
+				this.scrollToBottom();
+			}, 100);
 			
 			try {
-				// 调用 coze_request 云函数创建任务
-				const result = await uniCloud.callFunction({
+				const result = await wx.cloud.callFunction({
 					name: 'coze_request',
 					data: {
 						token: 'pat_tu253KJPlSsaCx1YFunZ00wr8VmJUd3z7hujxXd79Ag7JIgNtHw0pC6G58i63F8S',
-						workflowId: '7494836944268312617',
+						workflowId: '7490583402404839439',
 						parameters: {
-							prompt: this.prompt
+							prompt: this.savedPrompt
 						}
 					}
 				});
-
-				if (result.result && result.result.code === 0 && result.result.data && result.result.data.execute_id) {
+				
+				if (result.result.code === 0) {
 					this.taskId = result.result.data.execute_id;
+					// 开始轮询任务状态
 					this.startCheckingStatus();
 				} else {
-					throw new Error('创建任务失败: ' + (result.result?.msg || '未知错误'));
+					throw new Error(result.result.msg || '创建任务失败');
 				}
 			} catch (error) {
-				uni.showToast({
-					title: '生成文案失败，请重试',
-					icon: 'none'
+				console.error('生成失败:', error);
+				this.removeLoadingMessage();
+				this.conversationMessages.push({
+					type: 'bot',
+					content: `生成失败，请稍后重试`,
+					timestamp: Date.now()
 				});
 				this.loading = false;
 			}
 		},
 		
-		// 开始检查任务状态
-		async startCheckingStatus() {
+		removeLoadingMessage() {
+			this.conversationMessages = this.conversationMessages.filter(msg => msg.type !== 'loading');
+		},
+		
+		startCheckingStatus() {
 			if (this.checkStatusInterval) {
 				clearInterval(this.checkStatusInterval);
 			}
 			
 			this.checkStatusInterval = setInterval(async () => {
 				try {
-					if (!this.taskId) {
-						clearInterval(this.checkStatusInterval);
-						this.loading = false;
-						return;
-					}
-					
-					const result = await uniCloud.callFunction({
+					const result = await wx.cloud.callFunction({
 						name: 'coze_worker',
 						data: {
 							token: 'pat_tu253KJPlSsaCx1YFunZ00wr8VmJUd3z7hujxXd79Ag7JIgNtHw0pC6G58i63F8S',
-							workflowId: '7494836944268312617',
+							workflowId: '7490583402404839439',
 							execute_id: this.taskId
 						}
 					});
 					
-					if (result.result && result.result.code === 0) {
+					if (result.result.code === 0) {
 						const task = result.result.data;
+						console.log('任务状态:', task.status);
+						console.log('Token值:', task.token);
 						
 						if (task.status === 'Success') {
 							clearInterval(this.checkStatusInterval);
 							this.loading = false;
-							uni.hideLoading();
 							
-							// 获取API返回的内容
-							let responseText = '';
-							let videoUrl = '';
+							this.removeLoadingMessage();
 							
-							// 首先尝试从output字段提取内容
-							if (task.originalData && task.originalData.output) {
-								const output = task.originalData.output;
+							try {
+								let rawData = task.rawOutput?.output || task.rawOutput || task.originalData?.output || task.originalData || '';
+								console.log('获取到原始数据类型:', typeof rawData, rawData);
 								
-								try {
-									// 尝试解析JSON格式
-									const jsonObj = JSON.parse(output);
-									
-									// 检查是否是视频URL
-									if (jsonObj.Output && typeof jsonObj.Output === 'string' && 
-										(jsonObj.Output.includes('.mp4') || 
-										 jsonObj.Output.includes('.mov') || 
-										 jsonObj.Output.includes('video') || 
-										 jsonObj.Output.includes('digitalHuman'))) {
+								this.saveToHistory(rawData);
+								
+								this.currentResponse = rawData;
+								
+								this.$nextTick(() => {
+									if (this.$refs.responseFormatter) {
+										this.$refs.responseFormatter.processResponse(rawData);
 										
-										// 清理URL字符串（移除引号和转义字符）
-										videoUrl = jsonObj.Output.replace(/^"/, '').replace(/"$/, '')
-														.replace(/\\"/g, '"')
-														.replace(/\\\\/g, '\\');
-										
-										console.log('找到视频URL:', videoUrl);
-									} 
-									// 常规文本内容检查
-									else if (jsonObj.Output) {
-										responseText = typeof jsonObj.Output === 'string' ? jsonObj.Output : JSON.stringify(jsonObj.Output);
-									} else if (jsonObj.output) {
-										responseText = typeof jsonObj.output === 'string' ? jsonObj.output : JSON.stringify(jsonObj.output);
+										uni.showToast({
+											title: '生成成功',
+											icon: 'success'
+										});
 									} else {
-										// 没有特定字段，使用整个JSON对象
-										responseText = output;
+										this.removeLoadingMessage();
+										this.conversationMessages.push({
+											type: 'bot',
+											content: typeof rawData === 'string' ? rawData : JSON.stringify(rawData),
+											timestamp: Date.now(),
+											showCopyButton: true
+										});
 									}
-									
-									// 检查responseText是否为视频URL
-									if (!videoUrl && responseText && typeof responseText === 'string' && 
-										(responseText.includes('.mp4') || 
-										 responseText.includes('.mov') || 
-										 responseText.includes('video') || 
-										 responseText.includes('digitalHuman'))) {
-											
-										// 可能是URL，提取并清理
-										videoUrl = responseText.replace(/^"/, '').replace(/"$/, '')
-														.replace(/\\"/g, '"')
-														.replace(/\\\\/g, '\\');
-										// 清空responseText以避免重复显示
-										responseText = '';
-										
-										console.log('从responseText中找到视频URL:', videoUrl);
-									}
-									
-									// 如果responseText依然是JSON字符串，继续解析
-									if (!videoUrl && responseText && responseText.startsWith('"') && responseText.endsWith('"')) {
-										try {
-											const innerContent = JSON.parse(responseText);
-											
-											// 检查解析后的内容是否为视频URL
-											if (typeof innerContent === 'string' && 
-												(innerContent.includes('.mp4') || 
-												 innerContent.includes('.mov') || 
-												 innerContent.includes('video') || 
-												 innerContent.includes('digitalHuman'))) {
-												
-												videoUrl = innerContent;
-												responseText = '';
-												console.log('从嵌套JSON中找到视频URL:', videoUrl);
-											} else {
-												responseText = typeof innerContent === 'string' ? innerContent : JSON.stringify(innerContent);
-											}
-										} catch(e) {
-											// 如果不是有效的JSON，则移除首尾引号
-											responseText = responseText.substring(1, responseText.length - 1);
-										}
-									}
-									
-									// 清除所有格式为["output":" 或 {"Output":" 的前缀
-									if (responseText) {
-										responseText = responseText.replace(/^\s*\[?"[Oo]utput":\s*"/, '')
-											.replace(/^\s*\{?"[Oo]utput":\s*"/, '')
-											.replace(/^\s*"[Oo]utput":\s*"/, '');
-										
-										// 清除可能的尾部引号和括号
-										responseText = responseText.replace(/"\s*\}?\s*\]?\s*$/, '')
-											.replace(/"\s*\}?\s*$/, '');
-										
-										// 替换所有转义字符
-										responseText = responseText.replace(/\\n/g, '\n')
-														.replace(/\\"/g, '"')
-														.replace(/\\\\/g, '\\');
-									}
-								} catch (e) {
-									// 如果解析失败，尝试直接从原始内容中查找视频URL
-									const urlMatch = output.match(/(https?:\/\/[^\s"]+\.(?:mp4|mov)[^\s"]*)/i);
-									if (urlMatch && urlMatch[1]) {
-										videoUrl = urlMatch[1];
-										console.log('从原始内容中提取视频URL:', videoUrl);
-									} else {
-										// 如果没有找到视频URL，直接使用原始内容但尝试清除前缀
-										responseText = output
-											.replace(/^\s*\[?"[Oo]utput":\s*"/, '')
-											.replace(/^\s*\{?"[Oo]utput":\s*"/, '')
-											.replace(/^\s*"[Oo]utput":\s*"/, '')
-											.replace(/"\s*\}?\s*\]?\s*$/, '')
-											.replace(/"\s*\}?\s*$/, '')
-											.replace(/\\n/g, '\n')
-											.replace(/\\"/g, '"')
-											.replace(/\\\\/g, '\\');
-									}
-								}
+								});
+							} catch (error) {
+								console.error('处理响应数据失败:', error);
+								this.removeLoadingMessage();
+								this.conversationMessages.push({
+									type: 'bot',
+									content: '处理返回内容出错，请重试',
+									timestamp: Date.now()
+								});
 							}
-							
-							// 添加到历史消息
-							this.completedResponses.unshift({
-								prompt: this.prompt,
-								text: responseText,
-								videoUrl: videoUrl
-							});
-							
-							// 清空输入框
-							this.prompt = '';
-							
-							// 滚动到顶部以查看结果
-							this.scrollToTop();
-							
-							uni.showToast({
-								title: '生成成功',
-								icon: 'success'
-							});
 						} else if (task.status === 'Failed') {
 							clearInterval(this.checkStatusInterval);
 							this.loading = false;
-							uni.hideLoading();
-							
-							const errorMsg = task.error || '生成文案失败，请重试';
-							
-							uni.showModal({
-								title: '生成失败',
-								content: errorMsg,
-								showCancel: false
-							});
-						} else if (task.status === 'Running') {
-							uni.showLoading({
-								title: '正在生成文案...',
-								mask: true
+							this.removeLoadingMessage();
+							this.conversationMessages.push({
+								type: 'bot',
+								content: '很抱歉，生成失败，请调整您的描述或稍后再试',
+								timestamp: Date.now()
 							});
 						}
 					} else {
-						throw new Error(result.result?.msg || '检查任务状态失败');
+						console.error('获取任务状态失败:', result.result.msg);
+						clearInterval(this.checkStatusInterval);
+						this.loading = false;
+						this.removeLoadingMessage();
+						this.conversationMessages.push({
+							type: 'bot',
+							content: '获取任务状态失败，请重试',
+							timestamp: Date.now()
+						});
 					}
 				} catch (error) {
+					console.error('检查任务状态失败:', error);
 					clearInterval(this.checkStatusInterval);
 					this.loading = false;
-					uni.hideLoading();
-					
-					uni.showModal({
-						title: '错误',
+					this.removeLoadingMessage();
+					this.conversationMessages.push({
+						type: 'bot',
 						content: '检查任务状态失败，请重试',
-						showCancel: false
+						timestamp: Date.now()
 					});
 				}
 			}, 3000);
 		},
 		
-		// 滚动到顶部
-		scrollToTop() {
-			this.scrollTop = 0;
+		processCozeBotResponse(data) {
+			console.log('处理Coze响应:', typeof data);
+			
+			this.currentResponse = data;
+			this.$nextTick(() => {
+				if (this.$refs.responseFormatter) {
+					this.$refs.responseFormatter.processResponse(data);
+				} else {
+					console.error('未找到ResponseFormatter组件引用');
+					this.conversationMessages.push({
+						type: 'bot',
+						content: typeof data === 'string' ? data : JSON.stringify(data),
+						timestamp: Date.now(),
+						showCopyButton: true
+					});
+				}
+			});
+			
+			return {
+				title: '',
+				text: '',
+				imageUrls: []
+			};
 		},
 		
-		// 复制视频链接
-		copyVideoUrl(url) {
-			if (!url) return;
+	
+		
+		handleResponseProcessed(result) {
+			console.log('响应处理完成:', result);
+			const currentTimestamp = Date.now();
+			if (currentTimestamp - this.lastProcessedTimestamp < 500) {
+				console.log('忽略重复处理');
+				return;
+			}
+			this.lastProcessedTimestamp = currentTimestamp;
+			
+			this.removeLoadingMessage();
+			
+			const timestamp = Date.now();
+			const title = result.title || ''; 
+			const textContent = result.text || '';
+
+			if (result.videoUrl) {
+				
+				console.log('检测到视频URL:', result.videoUrl);
+				
+				let videoUrl = result.videoUrl;
+				
+				if (typeof videoUrl === 'object') {
+					videoUrl = JSON.stringify(videoUrl);
+				}
+				
+				处理视频内容
+				this.conversationMessages.push({
+					type: 'bot',
+					content: textContent,
+					mediaType: 'video',
+					mediaUrl: videoUrl,
+					timestamp: timestamp,
+					showCopyButton: !!textContent,
+					videoLoading: true 
+				});
+				
+				console.log('添加了视频消息:', videoUrl);
+			} else if (result.imageUrls && result.imageUrls.length > 0) {
+			
+				result.imageUrls.forEach((imageUrl, index) => {
+					if (imageUrl && typeof imageUrl === 'string' && imageUrl.includes('http')) {
+						const message = {
+							type: 'bot',
+							mediaType: 'image',
+							mediaUrl: imageUrl,
+							timestamp: timestamp
+						};
+					
+						if (index === 0 && textContent) {
+							message.content = textContent; 
+							message.showCopyButton = true; 
+						}
+						this.conversationMessages.push(message);
+					}
+				});
+			} else if (textContent) {
+				// 处理纯文本内容
+				this.conversationMessages.push({
+					type: 'bot',
+					content: textContent, 
+					timestamp: timestamp,
+					showCopyButton: true
+				});
+			} else {
+				// 处理异常情况 - 没有任何内容
+				this.conversationMessages.push({
+					type: 'bot',
+					content: '未能获取到有效内容，请重试',
+					timestamp: timestamp
+				});
+			}
+			
+			setTimeout(() => {
+				this.scrollToBottom();
+			}, 200);
+		},
+		
+		handleJsonProcessed(processedData) {
+			console.log('JSON数据处理完成:', processedData);
+		},
+		
+		copyText(text) {
+			if (!text) return;
 			
 			uni.setClipboardData({
-				data: url,
-				success: () => {
+				data: text,
+				success: function() {
 					uni.showToast({
-						title: '视频链接已复制',
+						title: '已复制',
 						icon: 'success'
 					});
-				},
-				fail: (err) => {
-					console.error('复制失败:', err);
-					uni.showToast({
-						title: '复制失败',
-						icon: 'none'
-					});
 				}
 			});
 		},
 		
-		// 在浏览器中打开视频链接
-		openInBrowser(url) {
-			if (!url) return;
-			
-			// 使用系统浏览器打开链接
-			// #ifdef H5
-			window.open(url, '_blank');
-			// #endif
-			
-			// #ifdef APP-PLUS
-			plus.runtime.openURL(url);
-			// #endif
-			
-			// #ifdef MP
-			uni.setClipboardData({
-				data: url,
-				success: () => {
-					uni.showModal({
-						title: '提示',
-						content: '链接已复制，请在浏览器中打开',
-						showCancel: false
-					});
+		// 清除历史记录
+		clearHistory() {
+			uni.showModal({
+				title: '确认清除',
+				content: '确定要清除所有历史记录吗？',
+				success: (res) => {
+					if (res.confirm) {
+						this.completedResponses = [];
+						this.conversationMessages = [];
+						uni.showToast({
+							title: '已清除历史记录',
+							icon: 'success'
+						});
+					}
 				}
 			});
-			// #endif
 		},
 		
 		scrollToBottom() {
@@ -463,16 +415,58 @@ export default {
 					container.scrollTop = container.scrollHeight;
 				}
 			});
+		},
+		
+		handleMediaDetected(media) {
+			console.log('检测到媒体:', media);
+		},
+		
+		handleLinksDetected(links) {
+			console.log('检测到链接:', links);
+		},
+		
+		saveToHistory(responseData) {
+			const responseItem = {
+				prompt: this.savedPrompt,
+				timestamp: Date.now(),
+				text: responseData
+			};
+			
+			if (!this.completedResponses) {
+				this.completedResponses = [];
+			}
+			this.completedResponses.unshift(responseItem);
 		}
 	},
-	
-	onLoad() {
-		console.log('========= AI文案助手初始化 =========');
+
+	mounted() {
+		if (this.conversationMessages.length > 0) {
+			setTimeout(() => {
+				this.scrollToBottom();
+			}, 500);
+		}
 		document.body.style.overflow = 'hidden';
 	},
-	
+
 	beforeDestroy() {
 		document.body.style.overflow = '';
+	},
+
+	onLoad() {
+		console.log('========= AI初始化 =========');
+		
+		this.conversationMessages = [];
+		
+		setTimeout(() => {
+			this.scrollToBottom();
+		}, 800);
+		
+		setTimeout(() => {
+			if (this.conversationMessages.length === 0 && this.$refs.conversationComp) {
+				console.log('尝试强制处理初始消息');
+				this.$refs.conversationComp.handleInitialMessage();
+			}
+		}, 1000);
 	}
 }
 </script>
@@ -492,193 +486,18 @@ export default {
 	overflow: hidden;
 	display: flex;
 	flex-direction: column;
+	box-sizing: border-box;
 	
-	/* 欢迎区域样式 */
-	.welcome-area {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		margin-bottom: 40rpx;
-		width: 100%;
-		min-height: 100vh;
-		position: relative;
-		
-		.robot-message {
-			position: absolute;
-			top: 40rpx;
-			left: 0;
-			padding-left: 20rpx;
-			width: 100%;
-			box-sizing: border-box;
-			z-index: 2;
-			display: flex;
-			align-items: flex-start;
-			
-			.robot-avatar {
-				width: 100rpx;
-				height: 100rpx;
-				flex-shrink: 0;
-				margin-right: 20rpx;
-				
-				image {
-					width: 100%;
-					height: 100%;
-				}
-			}
-			
-			.message-bubble {
-				background-color: #fff;
-				border-radius: 20rpx;
-				padding: 20rpx;
-				box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
-				position: relative;
-				max-width: 90%;
-				
-				&:before {
-					content: '';
-					position: absolute;
-					left: -16rpx;
-					top: 20rpx;
-					border-width: 8rpx;
-					border-style: solid;
-					border-color: transparent #fff transparent transparent;
-				}
-				
-				.message-text {
-					font-size: 28rpx;
-					color: #000;
-					line-height: 1.5;
-				}
-			}
-		}
-	}
-	
-	/* 内容区域样式 */
-	.content-area {
+	.chat-container {
 		flex: 1;
-		padding: 120rpx 30rpx calc(120rpx + constant(safe-area-inset-bottom));
-		padding: 120rpx 30rpx calc(120rpx + env(safe-area-inset-bottom));
+		padding: 20rpx 0;
+		margin-bottom: 120rpx; 
 		box-sizing: border-box;
-		position: relative;
 		height: calc(100vh - 240rpx);
 		overflow-y: auto;
 		-webkit-overflow-scrolling: touch;
-		
-		.message-list {
-			.message-item {
-				margin-bottom: 40rpx;
-				
-				.user-message {
-					display: flex;
-					justify-content: flex-end;
-					margin-bottom: 20rpx;
-					
-					.message-bubble {
-						max-width: 70%;
-						background-color: #007AFF;
-						border-radius: 20rpx;
-						padding: 20rpx;
-						box-shadow: 0 4rpx 16rpx rgba(0, 122, 255, 0.2);
-						position: relative;
-						
-						.message-text {
-							font-size: 28rpx;
-							color: #fff;
-							line-height: 1.5;
-						}
-					}
-				}
-				
-				.robot-message {
-					display: flex;
-					align-items: flex-start;
-					margin-bottom: 20rpx;
-					
-					.robot-avatar {
-						width: 80rpx;
-						height: 80rpx;
-						flex-shrink: 0;
-						margin-right: 20rpx;
-						
-						image {
-							width: 100%;
-							height: 100%;
-						}
-					}
-					
-					.message-bubble {
-						background-color: rgba(31, 31, 40, 0.8);
-						border-radius: 20rpx;
-						padding: 20rpx;
-						box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
-						position: relative;
-						max-width: 70%;
-						border: 1px solid rgba(0, 242, 255, 0.2);
-						
-						&:before {
-							content: '';
-							position: absolute;
-							left: -16rpx;
-							top: 20rpx;
-							border-width: 8rpx;
-							border-style: solid;
-							border-color: transparent rgba(31, 31, 40, 0.8) transparent transparent;
-						}
-						
-						.message-text {
-							font-size: 28rpx;
-							color: rgba(255, 255, 255, 0.9);
-							line-height: 1.5;
-							
-							.content-section-title {
-								font-size: 32rpx;
-								font-weight: bold;
-								color: rgba(0, 242, 255, 0.9);
-								margin: 20rpx 0 10rpx 0;
-								padding-bottom: 8rpx;
-								border-bottom: 1px dashed rgba(0, 242, 255, 0.4);
-							}
-						}
-						
-						.video-container {
-							margin: 20rpx 0;
-							width: 100%;
-							
-							.video-player {
-								width: 100%;
-								border-radius: 12rpx;
-								overflow: hidden;
-								margin-bottom: 15rpx;
-								box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
-							}
-							
-							.video-actions {
-								display: flex;
-								gap: 20rpx;
-								margin-top: 10rpx;
-								justify-content: space-between;
-								
-								.action-btn {
-									flex: 1;
-									height: 60rpx;
-									line-height: 60rpx;
-									text-align: center;
-									background-color: rgba(0, 242, 255, 0.2);
-									color: #fff;
-									border-radius: 30rpx;
-									font-size: 24rpx;
-									padding: 0 10rpx;
-									border: 1px solid rgba(0, 242, 255, 0.4);
-								}
-							}
-						}
-					}
-				}
-			}
-		}
 	}
-	
-	/* 输入区域样式 */
+
 	.input-area {
 		position: fixed;
 		bottom: 0;
@@ -688,13 +507,8 @@ export default {
 		display: flex;
 		align-items: center;
 		gap: 20rpx;
-		background-color: rgba(31, 31, 40, 0.8);
-		backdrop-filter: blur(10px);
 		border-top: 1px solid rgba(0, 242, 255, 0.15);
 		box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
-		z-index: 999;
-		padding-bottom: calc(20rpx + constant(safe-area-inset-bottom));
-		padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
 
 		input {
 			flex: 1;
@@ -728,27 +542,13 @@ export default {
 			}
 
 			.send-icon {
-				width: 80rpx;
-				height: 80rpx;
+				width: 200rpx;
+				height: 200rpx;
 			}
 
 			&:disabled {
 				opacity: 0.6;
 			}
-		}
-	}
-	
-	/* 加载动画样式 */
-	.loading-container {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		padding: 60rpx 0;
-		
-		.loading-text {
-			font-size: 28rpx;
-			color: rgba(255, 255, 255, 0.7);
 		}
 	}
 }

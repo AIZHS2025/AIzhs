@@ -1,10 +1,9 @@
 <template>
-	<view class="container" style="color: white">
+	<view class="container" style="padding: 0 20rpx">
 		<!-- 引入外部 顶部导航栏 -->
 		<navigation-bars 
-		    :backgroundColor="color"
-      		viscosity="true"
 			color="#171717" 
+			font-size-30 
 			title="5.8测试" 
 			@pack="backPage" 
 			:image="'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/返回.png'" />
@@ -74,7 +73,6 @@ export default {
 	data() {
 		return {
 			prompt: '',
-			color: "",
 			loading: false,
 			completedResponses: [],
 			taskId: null,
@@ -88,10 +86,6 @@ export default {
 			lastProcessedTimestamp: 0
 		}
 	},
-	onPageScroll(e) {
-    this.scrollTop = e.scrollTop;
-    this.color = e.scrollTop > 20 ? "white" : "transparent";
-  },
 	methods: {
 		// 导航栏 返回上一页
 		backPage() {
@@ -223,6 +217,7 @@ export default {
 					if (result && result.result && result.result.code === 0) {
 						const task = result.result.data;
 						console.log('任务状态:', task.status);
+						console.log('Token值:', task.token);
 						
 						if (task.status === 'Success') {
 							// 任务完成

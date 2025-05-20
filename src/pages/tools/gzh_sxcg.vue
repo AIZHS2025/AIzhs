@@ -260,10 +260,11 @@ export default {
 					console.log('状态检查结果:', result);
 					
 					if (result && result.result && result.result.code === 0) {
-						const status = result.result.data;
-						console.log('回复状态:', status.is_completed);
+						const task = result.result.data;
+						console.log('任务状态:', task.status);
+						console.log('Token值:', task.token);
 						
-						if (status.is_completed) {
+						if (task.status === 'Success') {
 							// 回复完成
 							clearInterval(this.checkStatusInterval);
 							

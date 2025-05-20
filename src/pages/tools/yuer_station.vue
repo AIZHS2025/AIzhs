@@ -1,5 +1,5 @@
 <template>
-	<view class="container" style="color: white">
+	<view class="container" style="padding: 0 20rpx">
 		<!-- 引入外部 顶部导航栏 -->
 		<navigation-bars 
 			color="#171717" 
@@ -192,6 +192,7 @@ export default {
 					if (result.result.code === 0) {
 						const task = result.result.data;
 						console.log('任务状态:', task.status);
+						console.log('Token值:', task.token);
 						
 						if (task.status === 'Success') {
 							clearInterval(this.checkStatusInterval);
@@ -312,27 +313,15 @@ export default {
 			const textContent = result.text || '';
 
 			if (result.videoUrl) {
-				
 				console.log('检测到视频URL:', result.videoUrl);
-				
-				let videoUrl = result.videoUrl;
-				
-				if (typeof videoUrl === 'object') {
-					videoUrl = JSON.stringify(videoUrl);
-				}
-				
-				处理视频内容
 				this.conversationMessages.push({
 					type: 'bot',
-					content: textContent,
-					mediaType: 'video',
-					mediaUrl: videoUrl,
+					content: textContent || ` ${result.videoUrl}`,
 					timestamp: timestamp,
-					showCopyButton: !!textContent,
-					videoLoading: true 
+					showCopyButton: true
 				});
 				
-				console.log('添加了视频消息:', videoUrl);
+				console.log('添加了视频消息(链接形式)');
 			} else if (result.imageUrls && result.imageUrls.length > 0) {
 			
 				result.imageUrls.forEach((imageUrl, index) => {
