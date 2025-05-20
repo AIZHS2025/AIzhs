@@ -130,7 +130,7 @@ export default {
 			
 			this.conversationMessages.push({
 				type: 'loading',
-				content: '正在生成中...'
+				content: '正在努力生成中，请耐心等待不要退出页面哦...'
 			});
 			
 			setTimeout(() => {
@@ -193,6 +193,7 @@ export default {
 					if (result.result.code === 0) {
 						const task = result.result.data;
 						console.log('任务状态:', task.status);
+						console.log('Token值:', task.token);
 						
 						if (task.status === 'Success') {
 							clearInterval(this.checkStatusInterval);
