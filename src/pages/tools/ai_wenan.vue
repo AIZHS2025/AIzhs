@@ -78,7 +78,7 @@ export default {
 			checkStatusInterval: null,
 			savedPrompt: '',
 			conversationMessages: [],
-			userAvatar: 'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/user-avatar.png',
+			userAvatar: 'cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/hello.png',
 			botAvatar: 'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/jiqiren-big.png',
 			initialBotMessage: '请问您想要什么类型的文案？',
 			currentResponse: null,

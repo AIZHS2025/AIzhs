@@ -15,7 +15,6 @@
           <view class="ai-card-text">
             <text class="ai-card-title">{{ item.title }}</text>
             <text class="ai-card-desc">{{ item.desc }}</text>
-            <view class="ai-card-author">{{ item.author }}</view>
           </view>
           <view class="ai-card-img-wrapper">
             <!-- 骨架屏 -->
@@ -42,7 +41,7 @@
     </view>
 
     <!-- ai定制服务 -->
-    <view class="service-banner">
+    <view class="service-banner" @click="showServicePopup">
       <image
         src="https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/11.png"
         mode="aspectFit"
@@ -51,8 +50,22 @@
       <text class="service-text"> AI定制服务，满足您个性化的服务需求 </text>
     </view>
 
+    <!-- 服务弹窗 -->
+    <view v-if="isServicePopupVisible" class="service-mask" @click="hideServicePopup">
+      <view class="service-popup-content" @click.stop>
+        <text class="close-btn" @click="hideServicePopup">×</text>
+        <image
+          show-menu-by-longpress="true"
+          class="qr-code-image"
+          src="cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/image.png"
+          mode="aspectFit"
+        ></image>
+      </view>
+    </view>
+    
+
     <!-- 底部工具获取提示 -->
-    <view class="ai-bottom-banner ai-bottom-banner-text">
+    <view class="ai-bottom-banner ai-bottom-banner-text" @click="showServicePopup">
       <image
         class="ai-bottom-banner-img"
         src="https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/s tool.png"
@@ -60,6 +73,7 @@
       ></image>
       <text>获取平台独家精选的AI工具</text>
     </view>
+
   </view>
 </template>
 
@@ -68,6 +82,7 @@ export default {
   data() {
     return {
       expanded: false,
+      isServicePopupVisible: false,
       aiList: [
 			{
 				title: "AI文案创作",
@@ -279,6 +294,12 @@ export default {
     },
   },
   methods: {
+    showServicePopup() {
+      this.isServicePopupVisible = true;
+    },
+    hideServicePopup() {
+      this.isServicePopupVisible = false;
+    },
     navigateTo(path) {
       if (!path) {
         uni.showToast({
@@ -365,8 +386,7 @@ export default {
     justify-content: center;
   }
   .ai-card-title,
-  .ai-card-desc,
-  .ai-card-author {
+  .ai-card-desc {
     width: auto;
     max-width: 100%;
     overflow: hidden;
@@ -385,14 +405,15 @@ export default {
     font-size: 24rpx;
     color: #6c6c6c;
     margin-bottom: 8rpx;
-    display: block;
+    display: -webkit-box;
     opacity: 0.9;
-  }
-  .ai-card-author {
-    font-size: 24rpx;
-    color: #6c6c6c;
-    opacity: 0.7;
-    display: block;
+    width: auto;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
   .ai-card-img-wrapper {
     width: 130rpx;
@@ -490,8 +511,47 @@ export default {
     }
   }
 
-  // 底部工具获取提示
+  // 服务弹窗样式
+  .service-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
 
+  .service-popup-content {
+    position: relative;
+    width: 80%;
+    max-width: 600rpx;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .qr-code-image {
+    width: 100%;
+    height: 600rpx;
+    border-radius: 12rpx;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: -60rpx;
+    right: -60rpx;
+    font-size: 50rpx;
+    color: #fff;
+    z-index: 1000;
+    padding: 10rpx;
+    text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.3);
+  }
+
+  // 底部工具获取提示
   .special-tools {
     margin: 0 20rpx;
   }

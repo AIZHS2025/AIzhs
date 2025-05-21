@@ -57,7 +57,6 @@ import UpToDate from "@/components/CourseCarousel/UpToDate.vue";
 import { postPopularCourses } from "@/service/index.js";
 import { getCoursePlanet } from "@/service/coursePlanet.js";
 import { pay } from "@/utils/pay/index.js";
-import SearchBox from "../tools/components/Search-box.vue";
 
 export default {
   components: {

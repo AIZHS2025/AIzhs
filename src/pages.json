@@ -443,7 +443,7 @@
     "list": [
       {
         "pagePath": "pages/table/tools/index",
-        "text": "AI agent",
+        "text": "AI Agent",
         "iconPath": "static/tabbar/home.png",
         "selectedIconPath": "static/tabbar/home-active.png"
       },
@@ -461,7 +461,7 @@
       },
       {
         "pagePath": "pages/table/share/index",
-        "text": "知识星球",
+        "text": "AI资讯",
         "iconPath": "static/tabbar/user.png",
         "selectedIconPath": "static/tabbar/user-active.png"
       },

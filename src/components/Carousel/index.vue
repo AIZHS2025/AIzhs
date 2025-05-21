@@ -62,7 +62,7 @@ export default {
   position: relative;
   width: 100%;
   height: 288rpx;
-  margin-top: 180rpx;
+  /* margin-top: 180rpx; */
 }
 
 .carousel {

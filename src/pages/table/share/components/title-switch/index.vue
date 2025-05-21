@@ -102,7 +102,7 @@ export default {
     title() {
       return this.switchs === 1
         ? {
-            name: "热门新闻",
+            name: "每日AI资讯",
             images:
               "https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/user/图标 2@2x.png",
           }

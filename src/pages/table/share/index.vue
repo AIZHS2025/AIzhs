@@ -3,7 +3,7 @@
     <navigation-bars
       color="black"
       viscosity="true"
-      title="知识星球"
+      title="AI资讯"
       :backgroundColor="color"
     />
     <view style="padding: 0 20rpx">

@@ -1,7 +1,7 @@
 <template>
   <view class="main-container" style="color: white">
     <!-- 引入 顶部导航栏 -->
-    <navigation-bars
+    <navigation-bars 
       color="black"
       :backgroundColor="color"
       viscosity="true"
@@ -9,7 +9,6 @@
       @pack="onPackClick"
     />
 
-    <!-- <view class=" container" style="color:white"> -->
     <!-- 引入弹窗组件 -->
     <interest-track-modal
       :visible="showModal"
@@ -19,7 +18,14 @@
       :backgroundColor="color"
     ></interest-track-modal>
 
-    <!-- 引入 智能助手组件 -->
+    <!-- 引入 轮播图组件 -->
+    <view class="custom-carousel-wrapper" style="margin: 30rpx 20rpx">
+      <Carousel
+        :banner="HomePagedata.banner_carousel"
+        @item-click="onCarouselItemClick"
+      />
+    </view>
+
     <intelligent-assistant></intelligent-assistant>
 
     <!-- 引入 搜索框组件 -->
@@ -44,7 +50,7 @@
           >
             <text class="item-title">一键生成运营内容</text>
             <text class="item-description">文➡图➡视频➡输出一站式服务</text>
-            <text class="item-author">@AI | 呼呼呼呼</text>
+            <!-- <text class="item-author">@AI | 呼呼呼呼</text> -->
           </view>
         </view>
       </view>
@@ -65,6 +71,8 @@ import NavigationBars from "@/components/navigation-bars/index.vue";
 import SearchBox from "./components/Search-box.vue";
 import SlideCard from "./components/Slide-card.vue";
 import AiList from "./components/Ai-list.vue";
+import Carousel from "@/components/Carousel/index.vue";
+import { getHomePageResources } from "@/service/index.js";
 
 export default {
   components: {
@@ -74,6 +82,7 @@ export default {
     SlideCard,
     SearchBox,
     AiList,
+    Carousel,
   },
 
   data() {
@@ -83,6 +92,7 @@ export default {
       showModal: true,
       currentBanner: 0,
       searchKeyword: "",
+      HomePagedata: {},
       // 兴趣赛道对应的页面路径
       interestPagePath: "/pages/table/index/interest",
 
@@ -102,6 +112,19 @@ export default {
     this.color = e.scrollTop > 20 ? "white" : "transparent";
   },
   methods: {
+    // 处理轮播图点击事件
+    onCarouselItemClick(item) {
+      console.log("父组件收到点击事件，轮播图ID：", item.id);
+    },
+
+    // 获取首页数据
+    home() {
+      getHomePageResources().then((res) => {
+        this.HomePagedata = res.data;
+        console.log("首页数据:", res.data);
+      });
+    },
+
     // AI搜索框 处理输入、搜索、跳转逻辑
     onInput(value) {
       console.log("Input value:", value);
@@ -162,6 +185,9 @@ export default {
     onSwiperChange(e) {
       this.currentBanner = e.detail.current;
     },
+  },
+  onLoad() {
+    this.home();
   },
 };
 </script>

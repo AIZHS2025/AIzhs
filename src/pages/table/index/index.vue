@@ -30,10 +30,14 @@
       :bounce="true"
       :fast-deceleration="true"
     >
+
+    <view class="custom-carousel-wrapper" style="margin-top: 180rpx">
       <Carousel
         :banner="HomePagedata.banner_carousel"
         @item-click="onCarouselItemClick"
       />
+    </view>
+
       <ToolBar @id-service="handerServiceClick" />
       <PopularCourses
         :CourseList1="CourseList1"

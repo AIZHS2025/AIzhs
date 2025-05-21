@@ -86,11 +86,9 @@
         <text style="font-size: 32rpx; font-weight: bold; color: black"
           >请选择充值面额</text
         >
-        <text style="font-size: 26rpx; color: #d33844; margin-left: 20rpx"
-          >显示itoken数值：{{ tokenRecharge.price }}元等于{{
-            tokenRecharge.name
-          }}</text
-        >
+        <text style="font-size: 26rpx; color: #d33844; margin-left: 20rpx">
+			显示token数值：{{ tokenRecharge.price }}元等于{{tokenRecharge.name}}
+		</text >
       </view>
       <view class="price">
         <view

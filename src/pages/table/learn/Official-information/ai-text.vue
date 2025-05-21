@@ -16,8 +16,8 @@
     <view class="meta-row">
       <view></view>
       <view>
-        <text class="meta-views">{{ information.view }}人浏览</text>
-        <text class="meta-date">{{ information.date }}</text>
+        <text class="meta-views">{{ information.view }}浏览</text>
+        <text class="meta-date">{{ happenTimeFun(information.date) }}</text>
       </view>
     </view>
 
@@ -30,19 +30,20 @@
 </template>
 
 <script>
+import { happenTimeFun, formatFullTime } from "@/utils/time.js";
 export default {
   props: {
     information:{
       type: Object,
       default:{}
     }
-  }
+  },
+  methods:{
+    happenTimeFun,
+    formatFullTime,
+  },
 }
-	// methods:{
-    /**查询资讯详情 */
-		// }
-
-
+	
     // return {
     //   title: 'AI早报｜我国人工智能专利申请量居全球首位；字节启动大模型顶尖人才校招计划',
     //   tag: '人工智能',
