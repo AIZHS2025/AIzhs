@@ -43,7 +43,7 @@
 				type="text" 
 				v-model="prompt" 
 				:disabled="loading" 
-				placeholder="输入您想要的内容..." 
+				placeholder="输入您的问题..." 
 				placeholder-class="placeholder-style"
 				@confirm="handleSendMessage" 
 			/>
@@ -86,7 +86,7 @@ export default {
 			
 			// Coze API 配置
 			token: 'pat_tu253KJPlSsaCx1YFunZ00wr8VmJUd3z7hujxXd79Ag7JIgNtHw0pC6G58i63F8S',
-			botId: '7488707978464460815',
+			botId: '7496004437845082164',
 			userId: 'user_' + Math.random().toString(36).substring(2, 10),
 			conversationId: '',
 			chatId: '',
@@ -145,7 +145,7 @@ export default {
 			// 添加加载中消息
 			this.conversationMessages.push({
 				type: 'loading',
-				content: '正在生成中...'
+				content: '正在努力生成中，请耐心等待不要退出页面哦...'
 			});
 			
 			// 延迟滚动到底部，确保DOM已更新
@@ -154,9 +154,10 @@ export default {
 			}, 100);
 			
 			try {
+				// 使用coze_chatv3_request发送所有对话，带上完整历史消息
 				console.log('准备调用云函数coze_chatv3_request...');
 				
-				// 构建消息上下文
+				// 构建包含全部历史的消息上下文
 				let additionalMessages = this.conversationMessages
 					.filter(msg => msg.type !== 'loading')
 					.map(msg => ({
@@ -166,22 +167,15 @@ export default {
 						type: msg.type === 'user' ? 'question' : 'answer'
 					}));
 				
-				// 添加当前消息（已在conversationMessages中添加，无需重复添加）
-				
-				// 准备发送参数
+				// 准备发送参数 - 无需使用会话ID
 				const callParams = {
 					token: this.token,
 					bot_id: this.botId,
 					user_id: this.userId,
 					additional_messages: additionalMessages,
-					stream: false, // 非流式响应
+					stream: false,
 					auto_save_history: true
 				};
-				
-				// 只有当会话ID有值且不为空字符串时才添加
-				if (this.conversationId && this.conversationId.trim()) {
-					callParams.conversation_id = this.conversationId;
-				}
 				
 				console.log('发送参数:', callParams);
 				
@@ -190,13 +184,23 @@ export default {
 					data: callParams
 				});
 				
-				console.log('云函数返回结果:', result);
+				console.log('对话云函数返回结果:', result);
 				
 				if (result && result.result && result.result.code === 0) {
-					// 保存会话ID和聊天ID
+					// 保存聊天ID和会话ID，用于获取回复
 					this.chatId = result.result.data.chat_id;
-					if (!this.conversationId && result.result.data.conversation_id) {
+					
+					// 如果返回了会话ID，则保存
+					if (result.result.data.conversation_id) {
 						this.conversationId = result.result.data.conversation_id;
+						console.log('收到会话ID:', this.conversationId);
+						
+						// 保存到本地存储
+						try {
+							uni.setStorageSync('last_conversation_id', this.conversationId);
+						} catch (e) {
+							console.warn('保存会话ID失败:', e);
+						}
 					}
 					
 					// 开始轮询回复状态
@@ -221,6 +225,37 @@ export default {
 			}
 		},
 		
+		// 重置会话方法
+		resetConversation() {
+			// 清空会话ID和聊天ID
+			this.conversationId = '';
+			this.chatId = '';
+			
+			// 清除本地存储的会话ID
+			try {
+				uni.removeStorageSync('last_conversation_id');
+				console.log('已清除本地存储的会话ID');
+			} catch (e) {
+				console.warn('清除本地存储会话ID失败:', e);
+			}
+			
+			// 清空对话记录或添加提示消息
+			this.conversationMessages = [];
+			
+			// 重新添加初始消息
+			this.$nextTick(() => {
+				if (this.$refs.conversationComp) {
+					this.$refs.conversationComp.handleInitialMessage();
+				}
+			});
+			
+			// 显示提示
+			uni.showToast({
+				title: '会话已重置',
+				icon: 'success'
+			});
+		},
+		
 		// 移除加载消息
 		removeLoadingMessage() {
 			this.conversationMessages = this.conversationMessages.filter(msg => msg.type !== 'loading');
@@ -233,38 +268,60 @@ export default {
 				clearInterval(this.checkStatusInterval);
 			}
 			
+			// 检查计数器
+			let checkCount = 0;
+			const MAX_CHECKS = 30; // 最多检查30次，约60秒
+			
+			// 保存当前的聊天ID，防止在检查过程中被修改
+			const currentChatId = this.chatId;
+			
+			console.log('开始轮询状态，聊天ID:', currentChatId);
+			
 			// 设置新的定时器，每2秒检查一次
 			this.checkStatusInterval = setInterval(async () => {
 				try {
-					console.log('准备调用云函数coze_chatv3_is_reply_complete检查状态...');
+					// 超过最大检查次数，认为超时
+					if (checkCount >= MAX_CHECKS) {
+						console.error('检查次数超过限制，中止检查');
+						throw new Error('回复生成超时，请重试');
+					}
+					
+					checkCount++;
+					console.log(`准备调用云函数检查状态...(第${checkCount}次)`);
 					console.log('状态检查参数:', {
-						conversationId: this.conversationId,
-						chatId: this.chatId
+						chatId: currentChatId
 					});
 					
 					// 验证参数
-					if (!this.conversationId || !this.chatId) {
-						console.error('会话ID或聊天ID为空');
-						throw new Error('会话ID或聊天ID不能为空');
+					if (!currentChatId) {
+						console.error('聊天ID为空');
+						throw new Error('聊天ID不能为空');
 					}
 					
 					const result = await wx.cloud.callFunction({
 						name: 'coze_chatv3_is_reply_complete',
 						data: {
 							token: this.token,
-							conversation_id: this.conversationId,
-							chat_id: this.chatId
+							chat_id: currentChatId,
+							conversation_id: this.conversationId || 'temp_conversation_id'
 						}
 					});
 					
-					console.log('状态检查结果:', result);
+					console.log(`第${checkCount}次状态检查结果:`, result);
 					
 					if (result && result.result && result.result.code === 0) {
-						const task = result.result.data;
-						console.log('任务状态:', task.status);
-						console.log('Token值:', task.token);
+						const status = result.result.data;
+						console.log('回复状态:', status.is_completed);
 						
-						if (task.status === 'Success') {
+						// 更新token使用情况
+						if (status.token) {
+							const tokenUsage = {
+								total: status.token.token_count || 0
+							};
+							console.log('Token使用详情:', tokenUsage);
+						}
+						
+						if (status.is_completed) {
 							// 回复完成
 							clearInterval(this.checkStatusInterval);
 							
@@ -272,9 +329,9 @@ export default {
 							this.getReply();
 						}
 					} else {
-						// 获取状态失败
-						console.error('获取回复状态失败:', result.result?.msg);
-						throw new Error(result.result?.msg || '获取回复状态失败');
+						// 处理错误
+						console.error('获取回复状态失败:', result?.result?.msg || '未知错误');
+						throw new Error(result?.result?.msg || '获取回复状态失败');
 					}
 				} catch (error) {
 					console.error('检查回复状态失败:', error);
@@ -287,7 +344,7 @@ export default {
 					// 添加错误消息
 					this.conversationMessages.push({
 						type: 'bot',
-						content: '检查回复状态失败，请重试: ' + (error.message || '未知错误'),
+						content: '检查回复状态失败，请重新发送消息: ' + (error.message || '未知错误'),
 						timestamp: Date.now()
 					});
 				}
@@ -299,22 +356,21 @@ export default {
 			try {
 				console.log('准备调用云函数coze_chatv3_get_reply获取回复...');
 				console.log('获取回复参数:', {
-					conversationId: this.conversationId,
 					chatId: this.chatId
 				});
 				
 				// 验证参数
-				if (!this.conversationId || !this.chatId) {
-					console.error('会话ID或聊天ID为空');
-					throw new Error('会话ID或聊天ID不能为空');
+				if (!this.chatId) {
+					console.error('聊天ID为空');
+					throw new Error('聊天ID不能为空');
 				}
 				
 				const result = await wx.cloud.callFunction({
 					name: 'coze_chatv3_get_reply',
 					data: {
 						token: this.token,
-						conversation_id: this.conversationId,
-						chat_id: this.chatId
+						chat_id: this.chatId,
+						conversation_id: this.conversationId || 'temp_conversation_id'
 					}
 				});
 				
@@ -353,7 +409,9 @@ export default {
 						}
 					});
 				} else {
-					throw new Error(result && result.result ? (result.result.msg || '获取回复失败') : '获取回复失败: 返回结果格式异常');
+					const errorMsg = result?.result?.msg || '获取回复失败';
+					console.error('API返回错误:', errorMsg);
+					throw new Error(errorMsg);
 				}
 			} catch (error) {
 				console.error('获取回复失败:', error);
@@ -364,7 +422,7 @@ export default {
 				// 添加错误消息
 				this.conversationMessages.push({
 					type: 'bot',
-					content: `获取回复失败，请稍后重试: ${error.message || '未知错误'}`,
+					content: `获取回复失败，请重新发送消息: ${error.message || '未知错误'}`,
 					timestamp: Date.now()
 				});
 			} finally {
@@ -497,9 +555,9 @@ export default {
 				}
 				
 				// 使用requestAnimationFrame优化滚动
-				requestAnimationFrame(() => {
+				setTimeout(() => {
 					this.scrollToBottom();
-				});
+				}, 100);
 			});
 		},
 		
@@ -543,12 +601,12 @@ export default {
 		
 		// 滚动到底部 - 整体页面滚动
 		scrollToBottom() {
-			requestAnimationFrame(() => {
+			setTimeout(() => {
 				const chatContainer = document.querySelector('.chat-container');
 				if (chatContainer) {
 					chatContainer.scrollTop = chatContainer.scrollHeight;
 				}
-			});
+			}, 50);
 		},
 		
 		handleMediaDetected(media) {
@@ -722,7 +780,7 @@ export default {
 		document.body.style.overflow = 'hidden';
 	},
 
-	onLoad() {
+	async onLoad() {
 		console.log('========= AI初始化 =========');
 		
 		// 确保微信云开发已初始化
@@ -744,11 +802,22 @@ export default {
 		});
 		// #endif
 		
-		// 初始化空会话ID - 第一次请求不传递，由API创建
-		this.conversationId = '';
-		this.chatId = '';
-		
 		this.conversationMessages = [];
+		
+		// 尝试从本地存储恢复会话ID
+		try {
+			const savedId = uni.getStorageSync('last_conversation_id');
+			if (savedId) {
+				console.log('从本地存储恢复到会话ID:', savedId);
+				this.conversationId = savedId;
+			} else {
+				console.log('本地存储中没有会话ID，将在首次发送消息时创建');
+				this.conversationId = ''; // 确保会话ID为空
+			}
+		} catch (storageError) {
+			console.warn('读取本地存储失败:', storageError);
+			this.conversationId = ''; // 确保会话ID为空
+		}
 		
 		// 初始化完成后延迟滚动到底部
 		setTimeout(() => {
@@ -763,10 +832,11 @@ export default {
 			}
 		}, 1000);
 	},
-
+	
 	beforeDestroy() {
 		// 恢复页面滚动
 		document.body.style.overflow = '';
+		console.log('页面销毁，会话结束');
 	}
 }
 </script>

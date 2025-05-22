@@ -86,7 +86,7 @@ export default {
 			
 			// Coze API 配置
 			token: 'pat_tu253KJPlSsaCx1YFunZ00wr8VmJUd3z7hujxXd79Ag7JIgNtHw0pC6G58i63F8S',
-			botId: '7505746678079668233',
+			botId: '7489740932666245159',
 			userId: 'user_' + Math.random().toString(36).substring(2, 10),
 			conversationId: '',
 			chatId: '',
@@ -312,7 +312,14 @@ export default {
 					if (result && result.result && result.result.code === 0) {
 						const status = result.result.data;
 						console.log('回复状态:', status.is_completed);
-						console.log('Token值:', status.token);
+						
+						// 更新token使用情况
+						if (status.token) {
+							const tokenUsage = {
+								total: status.token.token_count || 0
+							};
+							console.log('Token使用详情:', tokenUsage);
+						}
 						
 						if (status.is_completed) {
 							// 回复完成

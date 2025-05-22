@@ -140,7 +140,7 @@ export default {
 			// 添加加载中消息
 			this.conversationMessages.push({
 				type: 'loading',
-				content: '正在生成中...'
+				content: '正在努力生成中，请耐心等待不要退出页面哦...'
 			});
 			
 			// 延迟滚动到底部，确保DOM已更新

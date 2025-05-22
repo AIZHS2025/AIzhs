@@ -86,7 +86,7 @@ export default {
 			
 			// Coze API 配置
 			token: 'pat_tu253KJPlSsaCx1YFunZ00wr8VmJUd3z7hujxXd79Ag7JIgNtHw0pC6G58i63F8S',
-			botId: '7505746678079668233',
+			botId: '7496005323237621779',
 			userId: 'user_' + Math.random().toString(36).substring(2, 10),
 			conversationId: '',
 			chatId: '',
@@ -310,11 +310,18 @@ export default {
 					console.log(`第${checkCount}次状态检查结果:`, result);
 					
 					if (result && result.result && result.result.code === 0) {
-						const task = result.result.data;
-						console.log('任务状态:', task.status);
-						console.log('Token值:', task.token);
+						const status = result.result.data;
+						console.log('回复状态:', status.is_completed);
 						
-						if (task.status === 'Success') {
+						// 更新token使用情况
+						if (status.token) {
+							const tokenUsage = {
+								total: status.token.token_count || 0
+							};
+							console.log('Token使用详情:', tokenUsage);
+						}
+						
+						if (status.is_completed) {
 							// 回复完成
 							clearInterval(this.checkStatusInterval);
 							

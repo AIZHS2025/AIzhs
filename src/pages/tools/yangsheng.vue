@@ -129,7 +129,7 @@ export default {
 			
 			this.conversationMessages.push({
 				type: 'loading',
-				content: '正在生成中...'
+				content: '正在努力生成中，请耐心等待不要退出页面哦...'
 			});
 			
 			setTimeout(() => {

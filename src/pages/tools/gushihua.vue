@@ -4,7 +4,7 @@
 		<navigation-bars 
 			color="#171717" 
 			font-size-30 
-			title="古诗话生成助手"
+			title="古风意境图片生成助手" 
 			@pack="backPage" 
 			:image="'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/返回.png'" />
 
@@ -23,6 +23,7 @@
 				:show-initial-message="true"
 				@copy="copyText"
 				@media-detected="handleMediaDetected"
+				@save-media="handleSaveMedia"
 			/>
 			
 			<!-- 处理数据的组件 -->
@@ -42,7 +43,7 @@
 				type="text" 
 				v-model="prompt" 
 				:disabled="loading" 
-				placeholder="输出您的内容..."
+				placeholder="输入您想要生成的内容..." 
 				placeholder-class="placeholder-style"
 				@confirm="handleSendMessage" 
 			/>
@@ -79,7 +80,7 @@ export default {
 			conversationMessages: [],
 			userAvatar: 'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/user-avatar.png',
 			botAvatar: 'https://mp-aab956eb-2e97-4b81-823e-69195b354e49.cdn.bspapp.com/tabbar/ai_agent/jiqiren-big.png',
-			initialBotMessage: '您可以试着描述一个画面',
+			initialBotMessage: '请在下方输入您想要的图片描述',
 			currentResponse: null,
 			lastProcessedTimestamp: 0
 		}
@@ -129,7 +130,7 @@ export default {
 			
 			this.conversationMessages.push({
 				type: 'loading',
-				content: '正在生成中...'
+				content: '正在努力生成中，请耐心等待不要退出页面哦...'
 			});
 			
 			setTimeout(() => {
@@ -184,7 +185,7 @@ export default {
 						name: 'coze_worker',
 						data: {
 							token: 'pat_tu253KJPlSsaCx1YFunZ00wr8VmJUd3z7hujxXd79Ag7JIgNtHw0pC6G58i63F8S',
-							workflowId: '7490583402404839439',
+							workflowId: '7490809486212005888',
 							execute_id: this.taskId
 						}
 					});
@@ -311,8 +312,34 @@ export default {
 			const timestamp = Date.now();
 			const title = result.title || ''; 
 			const textContent = result.text || '';
-
-			if (result.videoUrl) {
+			
+			// 检查是否有coze短链接图片
+			if (result.originalData && typeof result.originalData === 'string' && 
+				(result.originalData.includes('s.coze.cn/t/') || result.originalData.includes('coze.cn/t/'))) {
+				
+				console.log('检测到Coze短链接图片:', result.originalData);
+				const imageUrl = result.originalData.trim();
+				
+				// 添加图片消息
+				this.conversationMessages.push({
+					type: 'bot',
+					content: textContent || '生成的图片：',
+					mediaType: 'image',
+					mediaUrl: imageUrl,
+					timestamp: timestamp,
+					showCopyButton: true
+				});
+				
+				// 更新历史记录中的图片URL
+				if (!result.imageUrls) {
+					result.imageUrls = [imageUrl];
+				} else if (Array.isArray(result.imageUrls)) {
+					result.imageUrls.push(imageUrl);
+				}
+				
+				console.log('添加了图片消息:', imageUrl);
+			}
+			else if (result.videoUrl) {
 				
 				console.log('检测到视频URL:', result.videoUrl);
 				
@@ -322,15 +349,25 @@ export default {
 					videoUrl = JSON.stringify(videoUrl);
 				}
 				
-				处理视频内容
+				// 清理视频URL，确保去除引号等字符
+				videoUrl = videoUrl.replace(/^["']+|["']+$/g, '');
+				
+				// 使用mediaType进行视频显示
 				this.conversationMessages.push({
 					type: 'bot',
-					content: textContent,
+					content: textContent || '视频内容：',
 					mediaType: 'video',
 					mediaUrl: videoUrl,
 					timestamp: timestamp,
-					showCopyButton: !!textContent,
-					videoLoading: true 
+					showCopyButton: true
+				});
+				
+				// 添加一条纯文本消息以便于复制链接
+				this.conversationMessages.push({
+					type: 'bot',
+					content: `视频链接：${videoUrl}`,
+					timestamp: timestamp + 1,
+					showCopyButton: true
 				});
 				
 				console.log('添加了视频消息:', videoUrl);
@@ -411,12 +448,12 @@ export default {
 		},
 		
 		scrollToBottom() {
-			setTimeout(() => {
-				uni.pageScrollTo({
-					scrollTop: 99999,
-					duration: 300
-				});
-			}, 200);
+			requestAnimationFrame(() => {
+				const container = document.querySelector('.content-container');
+				if (container) {
+					container.scrollTop = container.scrollHeight;
+				}
+			});
 		},
 		
 		handleMediaDetected(media) {
@@ -425,6 +462,13 @@ export default {
 		
 		handleLinksDetected(links) {
 			console.log('检测到链接:', links);
+		},
+		
+		handleSaveMedia({ url, type }) {
+			console.log('保存媒体:', url, type);
+			if (type === 'image' && url) {
+				this.saveImage(url);
+			}
 		},
 		
 		saveToHistory(responseData) {
@@ -438,6 +482,108 @@ export default {
 				this.completedResponses = [];
 			}
 			this.completedResponses.unshift(responseItem);
+		},
+		
+		// 保存图片
+		saveImage(url) {
+			if (!url) return;
+			
+			// 先检查是否有保存到相册的权限
+			uni.getSetting({
+				success: (res) => {
+					// 如果没有权限，或者未曾询问过用户
+					if (!res.authSetting['scope.writePhotosAlbum']) {
+						uni.authorize({
+							scope: 'scope.writePhotosAlbum',
+							success: () => {
+								// 用户同意授权，继续下载并保存图片
+								this.downloadAndSaveImage(url);
+							},
+							fail: (err) => {
+								console.error('授权失败:', err);
+								// 如果用户拒绝授权，提示用户前往设置页面开启权限
+								uni.showModal({
+									title: '提示',
+									content: '保存图片需要您授权使用相册权限，请在设置中开启',
+									confirmText: '去设置',
+									cancelText: '取消',
+									success: (modalRes) => {
+										if (modalRes.confirm) {
+											// 打开设置页面
+											uni.openSetting({
+												success: (settingRes) => {
+													// 如果用户在设置页面开启了权限，再次尝试保存
+													if (settingRes.authSetting['scope.writePhotosAlbum']) {
+														this.downloadAndSaveImage(url);
+													}
+												}
+											});
+										}
+									}
+								});
+							}
+						});
+					} else {
+						// 已有权限，直接下载保存
+						this.downloadAndSaveImage(url);
+					}
+				},
+				fail: (err) => {
+					console.error('获取设置失败:', err);
+					uni.showToast({
+						title: '获取权限信息失败',
+						icon: 'none'
+					});
+				}
+			});
+		},
+		
+		// 下载并保存图片
+		downloadAndSaveImage(url) {
+			uni.showLoading({
+				title: '保存中...'
+			});
+			
+			uni.downloadFile({
+				url: url,
+				success: (res) => {
+					if (res.statusCode === 200) {
+						uni.saveImageToPhotosAlbum({
+							filePath: res.tempFilePath,
+							success: () => {
+								uni.hideLoading();
+								uni.showToast({
+									title: '保存成功',
+									icon: 'success'
+								});
+							},
+							fail: (err) => {
+								uni.hideLoading();
+								console.error('保存图片失败:', err);
+								uni.showToast({
+									title: '保存失败: ' + (err.errMsg || '未知错误'),
+									icon: 'none',
+									duration: 2000
+								});
+							}
+						});
+					} else {
+						uni.hideLoading();
+						uni.showToast({
+							title: '图片下载失败',
+							icon: 'none'
+						});
+					}
+				},
+				fail: (err) => {
+					uni.hideLoading();
+					console.error('下载图片失败:', err);
+					uni.showToast({
+						title: '下载失败: ' + (err.errMsg || '未知错误'),
+						icon: 'none'
+					});
+				}
+			});
 		}
 	},
 
@@ -447,6 +593,11 @@ export default {
 				this.scrollToBottom();
 			}, 500);
 		}
+		document.body.style.overflow = 'hidden';
+	},
+
+	beforeDestroy() {
+		document.body.style.overflow = '';
 	},
 
 	onLoad() {
@@ -454,10 +605,7 @@ export default {
 		
 		this.conversationMessages = [];
 		
-		setTimeout(() => {
-			this.scrollToBottom();
-		}, 800);
-		
+		// 确保初始消息能显示
 		setTimeout(() => {
 			if (this.conversationMessages.length === 0 && this.$refs.conversationComp) {
 				console.log('尝试强制处理初始消息');
@@ -475,7 +623,12 @@ export default {
 	background-position: center;
 	background-repeat: no-repeat;
 	min-height: 100vh;
-	position: relative;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	overflow: hidden;
 	display: flex;
 	flex-direction: column;
 	box-sizing: border-box;
@@ -485,6 +638,9 @@ export default {
 		padding: 20rpx 0;
 		margin-bottom: 120rpx; 
 		box-sizing: border-box;
+		height: calc(100vh - 240rpx);
+		overflow-y: auto;
+		-webkit-overflow-scrolling: touch;
 	}
 
 	.input-area {
