@@ -12,6 +12,12 @@
         @upload="onUploadClick"
       ></business-card-sharing>
     </view>
+    
+    <!-- 新增制作过程按钮 -->
+    <view class="buy-token-btn" @click="buyToken">
+      制作过程
+    </view>
+
   </view>
 </template>
 
@@ -56,6 +62,12 @@ export default {
         })
         .catch((err) => {});
     },
+    buyToken() {
+      console.log("制作过程 button clicked");
+      uni.navigateTo({
+        url: "www.baidu.com" 
+      });
+    }
   },
 };
 </script>
@@ -74,5 +86,19 @@ export default {
   border-radius: 10rpx;
   text-align: center;
   background-color: transparent;
+}
+.buy-token-btn {
+  position: absolute;
+  // bottom: 40rpx;
+  left: 20rpx;
+  background: linear-gradient(0deg,rgba(199, 229, 235, 1) 25%, rgba(204, 237, 237, 1) 60%);
+  padding: 15rpx 30rpx;
+  border-radius: 30rpx;
+  font-size: 28rpx;
+  color: #333;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  backdrop-filter: blur(8rpx);
+  -webkit-backdrop-filter: blur(8rpx); 
 }
 </style>
