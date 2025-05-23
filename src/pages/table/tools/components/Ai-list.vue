@@ -116,6 +116,26 @@ export default {
 				bg: " linear-gradient(0deg,rgba(255, 255, 255, 1) 4%, rgba(175, 237, 202, 1) 29%, rgba(199, 215, 235, 1) 66%, rgba(242, 242, 237, 1) 96%);",
 				path: "/pages/tools/ai-marketing"
 			},
+
+			//新增两个飞书链接的按钮
+			{
+				title: "AI直播",
+				desc: "AI直播服务，点击可直接跳转飞书链接",
+				author: "@作者名称",
+				img: "cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/11.png",
+				bg:  "linear-gradient(0deg,rgba(240, 240, 240, 1) 5%, rgba(242, 242, 203, 1) 56%, rgba(240, 242, 201, 1) 48%, rgba(250, 254, 255, 1) 93%);",
+				path: "https://www.baidu.com"
+			},
+			{
+				title: "AI数字人",
+				desc: "制作数字人服务，点击可直接跳转飞书链接",
+				author: "@作者名称",
+				img: "cloud://cloud1-5gszljn762dc4719.636c-cloud1-5gszljn762dc4719-1353421569/cache/ai/12.png",
+				bg:  "linear-gradient(0deg,rgba(245, 245, 242, 1) 3%, rgba(237, 209, 227, 1) 30%, rgba(255, 207, 232, 1) 74%, rgba(244, 237, 241, 1) 94%);",
+				path: "https://www.baidu.com"
+			},
+
+
 			{
 				title: "抖音转文字",
 				desc: "将抖音视频内容转为文本",
@@ -490,7 +510,7 @@ export default {
   .service-banner {
     margin: 30rpx 2rpx;
     background: white;
-    border-radius: 40rpx;
+    border-radius: 32rpx;
     padding: 13rpx 2rpx;
     display: flex;
     align-items: center;
@@ -617,7 +637,7 @@ export default {
   .ai-bottom-banner-text {
     position: relative;
     background: #b6c8f7;
-    border-radius: 24rpx;
+    border-radius: 32rpx;
     padding: 18rpx 48rpx 18rpx 32rpx;
     color: #fff;
     font-size: 32rpx;

@@ -1175,13 +1175,14 @@ export default {
 			image {
 				width: 100%;
 				height: 100%;
-				border-radius: 50%;
+				border-radius: 30%;
 			}
 		}
 		
 		.message-bubble {
-			background-color: #DCF8C6;
-			border-radius: 20rpx;
+			// background-color: #DCF8C6;
+			background-color: rgba(220, 248, 198, 0.65);
+			border-radius: 30rpx;
 			padding: 20rpx;
 			box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
 			position: relative;
@@ -1194,7 +1195,7 @@ export default {
 				top: 20rpx;
 				border-width: 8rpx;
 				border-style: solid;
-				border-color: transparent transparent transparent #DCF8C6;
+				border-color: transparent transparent transparent rgba(220, 248, 198, 0.65);
 			}
 			
 			.message-text {
@@ -1219,17 +1220,19 @@ export default {
 			image {
 				width: 100%;
 				height: 100%;
-				border-radius: 50%;
+				border-radius: 30%;
 			}
 		}
 		
 		.message-bubble {
-			background-color: #fff;
-			border-radius: 20rpx;
+			// background-color: #fff;
+			background-color: rgba(255, 255, 255, 0.65);
+			border-radius: 30rpx;
 			padding: 20rpx;
 			box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
 			position: relative;
 			max-width: 90%;
+			// opacity: 0.65;
 			
 			&:before {
 				content: '';
@@ -1238,11 +1241,13 @@ export default {
 				top: 20rpx;
 				border-width: 8rpx;
 				border-style: solid;
-				border-color: transparent #fff transparent transparent;
+				// border-color: transparent #fff transparent transparent;
+				border-color: transparent rgba(255, 255, 255, 0.65) transparent transparent;
 			}
 			
 			&.loading-bubble {
-				background-color: #f2f2f2;
+				// background-color: #f2f2f2;
+				background-color: rgba(242, 242, 242, 0.65);
 				
 				&:before {
 					border-color: transparent #f2f2f2 transparent transparent;
@@ -1352,7 +1357,7 @@ export default {
 					background-color: #e0e0e0;
 					color: #333;
 					border: none;
-					border-radius: 20rpx;
+					border-radius: 30rpx;
 				}
 			}
 			

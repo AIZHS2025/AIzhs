@@ -891,7 +891,7 @@ export default {
 			height: 80rpx;
 			padding: 0 30rpx;
 			background-color: #E6F3FA;
-			border-radius: 40rpx;
+			border-radius: 50rpx;
 			font-size: 28rpx;
 			color: #333333;
 			transition: all 0.3s ease;
@@ -916,7 +916,7 @@ export default {
 			align-items: center;
 			justify-content: center;
 			background-color: transparent;
-			border-radius: 40rpx;
+			border-radius: 50rpx;
 			border: none;
 			transition: all 0.3s ease;
 
@@ -938,7 +938,7 @@ export default {
 			}
 
 			&:disabled {
-				opacity: 0.6;
+				opacity: 1;
 			}
 		}
 	}

@@ -660,7 +660,7 @@ export default {
 			height: 80rpx;
 			padding: 0 30rpx;
 			background-color: #E6F3FA;
-			border-radius: 40rpx;
+			border-radius: 30rpx;
 			font-size: 28rpx;
 			color: #333333;
 		}
@@ -679,7 +679,7 @@ export default {
 			align-items: center;
 			justify-content: center;
 			background-color: transparent;
-			border-radius: 40rpx;
+			border-radius: 30rpx;
 			border: none;
 
 			&::after {
@@ -692,7 +692,7 @@ export default {
 			}
 
 			&:disabled {
-				opacity: 0.6;
+				opacity: 1;
 			}
 		}
 	}
